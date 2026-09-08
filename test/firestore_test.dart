@@ -11,6 +11,9 @@ void main() {
         final donneesTest = {
           'statut': 'Succès ! Connecté à Firestore depuis Flutter',
           'date': DateTime.now().toIso8601String(),
+          'categories': 'Test',
+          'sellerId': 'seller1',
+          'createdAt': DateTime.now().toIso8601String(),
         };
 
         final docRef = await fakeFirestore.collection('tests').add(donneesTest);
