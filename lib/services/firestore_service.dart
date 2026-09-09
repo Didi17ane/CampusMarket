@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../features/auth/data/models/articles_models.dart';
+import '../features/annonces/data/models/articles_models.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db;
@@ -10,7 +10,7 @@ class FirestoreService {
   // AJOUT D'UN ARTICLE
   Future<String> addArticles(ArticlesModels articles) async {
     try {
-      final docRef = await _db.collection('Articles').add(articles.toMap());
+      final docRef = await _db.collection('Articles').add(articles.toJson());
       return docRef.id;
     } catch (e) {
       throw Exception("Erreur lors de l'ajout du produit:$e");
@@ -27,8 +27,8 @@ class FirestoreService {
           .snapshots()
           .map((snapshot) {
             return snapshot.docs.map((doc) {
-              return ArticlesModels.fromMap(doc.data(), doc.id);
-            }).toList(); 
+              return ArticlesModels.fromJson(doc.data(), id: doc.id);
+            }).toList();
           });
     } catch (e) {
       throw Exception('ERROR network $e');
