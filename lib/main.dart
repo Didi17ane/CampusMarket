@@ -4,9 +4,7 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const CampusMarketApp());
 }
 
@@ -18,9 +16,7 @@ class CampusMarketApp extends StatelessWidget {
     return MaterialApp(
       title: 'CampusMarket',
       debugShowCheckedModeBanner: false,
-      home: const Scaffold(
-        body: Center(child: Text('CampusMarket 🚀')),
-      ),
+      home: const Scaffold(body: Center(child: Text('CampusMarket 🚀'))),
     );
   }
 }
