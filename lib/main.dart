@@ -4,9 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'firebase_options.dart';
 import 'core/providers/auth_providers.dart';
 import 'features/auth/presentation/screens/profil_screen.dart';
+import 'features/mes_annonces/presentation/screens/mes_annonces_screen.dart';
 
-// ⚠️ ID UTILISATEUR DE TEST — uniquement pour visualiser Profil avant que
-// T-01 (Auth) soit terminé. À retirer dès que la vraie connexion existe.
+// ⚠️ ID UTILISATEUR DE TEST — uniquement pour visualiser Profil/Mes annonces
+// avant que T-01 (Auth) soit terminé. À retirer dès que la vraie connexion
+// existe : il suffira de supprimer ce override.
 const String kTestUserId = 'test-user-001';
 
 void main() async {
@@ -38,7 +40,36 @@ class CampusMarketApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: const Color(0xFFF5F5F5),
       ),
-      home: const ProfilScreen(),
+      home: const _TestNav(),
+    );
+  }
+}
+
+/// Navigation temporaire, juste pour tester Profil et Mes annonces.
+/// À remplacer par la vraie bottom nav (module Architecture & intégration).
+class _TestNav extends StatefulWidget {
+  const _TestNav();
+  @override
+  State<_TestNav> createState() => _TestNavState();
+}
+
+class _TestNavState extends State<_TestNav> {
+  int index = 0;
+  final screens = const [MesAnnoncesScreen(), ProfilScreen()];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: screens[index],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: index,
+        selectedItemColor: const Color(0xFFFF6B00),
+        onTap: (i) => setState(() => index = i),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.storefront), label: 'Annonces'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
+        ],
+      ),
     );
   }
 }
