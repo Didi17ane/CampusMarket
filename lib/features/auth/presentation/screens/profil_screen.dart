@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../providers/user_provider.dart';
+import 'modifier_profil_screen.dart';
+import '../../../mes_annonces/presentation/screens/mes_annonces_screen.dart';
 
 class ProfilScreen extends ConsumerWidget {
   const ProfilScreen({super.key});
@@ -62,32 +64,36 @@ class ProfilScreen extends ConsumerWidget {
                     _ProfilTile(
                       label: 'Modifier mes informations',
                       onTap: () {
-                        // TODO: écran de modification du profil
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ModifierProfilScreen(user: user),
+                          ),
+                        );
                       },
                     ),
                     _ProfilTile(
                       label: 'Mes produits / annonces',
                       onTap: () {
-                        // TODO: naviguer vers l'écran Mes annonces (T-09)
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const MesAnnoncesScreen(),
+                          ),
+                        );
                       },
                     ),
                     _ProfilTile(
                       label: 'Mes favoris',
-                      onTap: () {
-                        // TODO: écran favoris (hors périmètre T-08)
-                      },
+                      onTap: () => _bientotDisponible(context),
                     ),
                     _ProfilTile(
                       label: 'Paramètres de notification',
-                      onTap: () {
-                        // TODO: écran notifications (hors périmètre T-08)
-                      },
+                      onTap: () => _bientotDisponible(context),
                     ),
                     _ProfilTile(
                       label: 'Aide & support',
-                      onTap: () {
-                        // TODO: écran aide (hors périmètre T-08)
-                      },
+                      onTap: () => _bientotDisponible(context),
                     ),
                     const SizedBox(height: 24),
                     Padding(
@@ -118,6 +124,12 @@ class ProfilScreen extends ConsumerWidget {
           );
         },
       ),
+    );
+  }
+
+  void _bientotDisponible(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Bientôt disponible')),
     );
   }
 

@@ -16,9 +16,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     ProviderScope(
-      overrides: [
-        currentUserIdProvider.overrideWithValue(kTestUserId),
-      ],
+      overrides: [currentUserIdProvider.overrideWithValue(kTestUserId)],
       child: const CampusMarketApp(),
     ),
   );
@@ -66,7 +64,10 @@ class _TestNavState extends State<_TestNav> {
         selectedItemColor: const Color(0xFFFF6B00),
         onTap: (i) => setState(() => index = i),
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.storefront), label: 'Annonces'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.storefront),
+            label: 'Annonces',
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ],
       ),
