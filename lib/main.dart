@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import './features/auth/presentation/screens/signin.dart';
 
 void main() {
-  runApp(const CampusMarketApp());
+  runApp(const SignIn());
 }
 
 class CampusMarketApp extends StatelessWidget {
@@ -12,9 +13,7 @@ class CampusMarketApp extends StatelessWidget {
     return MaterialApp(
       title: 'CampusMarket',
       debugShowCheckedModeBanner: false,
-      home: const Scaffold(
-        body: Center(child: Text('CampusMarket 🚀')),
-      ),
+      home: const Scaffold(body: Center(child: Text('CampusMarket 🚀'))),
     );
   }
 }
