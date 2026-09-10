@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'firebase_options.dart';
+import 'package:campusmarket/features/annonces/presentation/screens/publier_annonce_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(const CampusMarketApp());
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(ProviderScope(child: CampusMarketApp()));
 }
 
 class CampusMarketApp extends StatelessWidget {
@@ -18,9 +18,7 @@ class CampusMarketApp extends StatelessWidget {
     return MaterialApp(
       title: 'CampusMarket',
       debugShowCheckedModeBanner: false,
-      home: const Scaffold(
-        body: Center(child: Text('CampusMarket 🚀')),
-      ),
+      home: const PublierAnnonceScreen(),
     );
   }
 }
