@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import './features/auth/presentation/screens/login.dart';
 
 void main() {
-  runApp(const Login());
+  runApp(const CampusMarketApp());
 }
 
 class CampusMarketApp extends StatelessWidget {
