@@ -12,7 +12,7 @@ import 'features/mes_annonces/presentation/screens/mes_annonces_screen.dart';
 // ⚠️ ID UTILISATEUR DE TEST — uniquement pour visualiser Profil/Mes annonces
 // avant que T-01 (Auth) soit terminé. À retirer dès que la vraie connexion
 // existe : il suffira de supprimer ce override.
-const String kTestUserId = 'test-user-001';
+const String kTestUserId = 'vendeur_etudiant_id_999';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
