@@ -11,7 +11,7 @@ class FirestoreService {
 
   FirestoreService({FirebaseFirestore? firestore})
     : _db = firestore ?? FirebaseFirestore.instance,
-      // Initialisation de Cloudinary avec vos identifiants du tableau de bord
+      // Initialisation de Cloudinary
       _cloudinary = Cloudinary.signedConfig(
         apiKey: dotenv.env['CLOUDINARY_API_KEY'] ?? '',
         apiSecret: dotenv.env['CLOUDINARY_API_SECRET'] ?? '',
@@ -79,7 +79,7 @@ class FirestoreService {
       return snapshot.docs.map((doc) {
         return {'id': doc.id, 'nom': (doc.data()['nom'] ?? '').toString()};
       }).toList();
-    });
+    }); 
   }
 
   /// --------------------  GESTION DES ARTICLES --------------------

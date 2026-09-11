@@ -43,10 +43,16 @@ class CustomTextField extends StatelessWidget {
             validator: validator,
             decoration: InputDecoration(
               hintText: hintText,
-              hintStyle: const TextStyle(color: AppColors.grisTexte, fontSize: 14),
+              hintStyle: const TextStyle(
+                color: AppColors.grisTexte,
+                fontSize: 14,
+              ),
               fillColor: AppColors.blanc,
               filled: true,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide.none,
@@ -57,7 +63,10 @@ class CustomTextField extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: AppColors.orangePrincipal, width: 1.5),
+                borderSide: const BorderSide(
+                  color: AppColors.orangePrincipal,
+                  width: 1.5,
+                ),
               ),
             ),
           ),

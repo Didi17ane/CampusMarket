@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:campusmarket/core/constants/theme_contants.dart';
+import 'package:campusmarket/core/widgets/custom_input_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../core/widgets/custom_button.dart';
-
 import '../../presentation/providers/published_provider.dart';
 
 class PublierAnnonceScreen extends ConsumerStatefulWidget {
@@ -23,21 +23,16 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
   final _titreController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _prixController = TextEditingController();
-  final _nouvelleCategorieController = TextEditingController();
 
   String? _categorieSelectionnee;
   File? _imageSelectionnee;
   final ImagePicker _picker = ImagePicker();
-
-  bool _isNouvelleCategorie =
-      false; // permettre de saisir une nouvelle categorie
 
   @override
   void dispose() {
     _titreController.dispose();
     _descriptionController.dispose();
     _prixController.dispose();
-    _nouvelleCategorieController.dispose();
     super.dispose();
   }
 
@@ -59,8 +54,9 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
                 final XFile? photo = await _picker.pickImage(
                   source: ImageSource.camera,
                 );
-                if (photo != null)
+                if (photo != null) {
                   setState(() => _imageSelectionnee = File(photo.path));
+                }
               },
             ),
             ListTile(
@@ -74,8 +70,9 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
                 final XFile? image = await _picker.pickImage(
                   source: ImageSource.gallery,
                 );
-                if (image != null)
+                if (image != null) {
                   setState(() => _imageSelectionnee = File(image.path));
+                }
               },
             ),
           ],
@@ -86,14 +83,16 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
 
   void _soumettreAnnonce() {
     if (_formKey.currentState!.validate()) {
-      String? categorieFinale;
-
-      if (_isNouvelleCategorie) {
-        categorieFinale = _nouvelleCategorieController.text.trim();
-      } else {
-        categorieFinale = _categorieSelectionnee;
+      if (_imageSelectionnee == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Veuillez ajouter une photo de votre article'),
+            backgroundColor: Colors.red, // Alerte visuelle rouge
+          ),
+        );
+        return; // Bloque la suite de l'exécution du code
       }
-      if (categorieFinale == null) {
+      if (_categorieSelectionnee == null || _categorieSelectionnee!.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Veuillez sélectionner ou saisir une catégorie'),
@@ -104,14 +103,14 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
 
       final prix = int.tryParse(_prixController.text) ?? 0;
 
-      // Appel de  provider Riverpod pour envoyer les données à Firestore
+      // Appel du provider Riverpod pour envoyer les données à Firestore
       ref
           .read(publishProvider.notifier)
           .publierAnnonce(
             name: _titreController.text.trim(),
             description: _descriptionController.text.trim(),
             prix: prix,
-            categorieSaisie: categorieFinale!,
+            categorieSaisie: _categorieSelectionnee!,
             imageFile: _imageSelectionnee,
           );
     }
@@ -146,7 +145,7 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
       }
     });
 
-    final publishState = ref. watch(publishProvider);
+    final publishState = ref.watch(publishProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -154,9 +153,9 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
           icon: const Icon(Icons.arrow_back, color: AppColors.blanc),
           onPressed: () => Navigator.of(context).pop(),
         ),
+
         title: Row(
           children: [
-            // Symbole de l'étudiant de la maquette représenté temporairement par une icône
             const Icon(
               Icons.directions_run,
               color: AppColors.orangePrincipal,
@@ -168,11 +167,13 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.bold,
+                color: AppColors.blanc,
               ),
             ),
           ],
         ),
         centerTitle: false,
+        backgroundColor: AppColors.noir,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -181,7 +182,7 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 1. Zone de sélection photo (Reproduction fidèle de la maquette)
+              // Zone de sélection photo
               GestureDetector(
                 onTap: _choisirImage,
                 child: Container(
@@ -239,7 +240,7 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
                     : null,
               ),
 
-              //Champ : Description
+              // Champ : Description
               CustomTextField(
                 label: 'Description',
                 hintText: 'Décris l\'état, les détails utiles...',
@@ -265,106 +266,118 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
                 },
               ),
 
-              // Menu Déroulant : Catégorie
-              const Text(
-                'Catégorie',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.noir,
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(height: 8),
+              // En-tête de catégorie avec bouton d'ajout sécurisé
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Catégorie',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.noir,
+                      fontSize: 14,
+                    ),
+                  ),
+                  TextButton.icon(
+                    onPressed: () async {
+                      final nouvelleCatSaisie = await CustomInputModal.show(
+                        context,
+                        title: "Nouvelle catégorie",
+                        label: "Nom de la catégorie",
+                        hintText: "Ex: Électroménager, Événements...",
+                        submitButtonText: "Créer",
+                      );
 
+                      if (nouvelleCatSaisie != null &&
+                          nouvelleCatSaisie.trim().isNotEmpty) {
+                        setState(() {
+                          _categorieSelectionnee = nouvelleCatSaisie.trim();
+                        });
+                      }
+                    },
+                    icon: const Icon(
+                      Icons.add,
+                      size: 16,
+                      color: AppColors.orangePrincipal,
+                    ),
+                    label: const Text(
+                      'Créer une catégorie',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.orangePrincipal,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              // Menu déroulant connecté à Firestore
               ref
                   .watch(categoriesStreamProvider)
                   .when(
                     data: (listeCategories) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          DropdownButtonFormField<String>(
-                            initialValue: _isNouvelleCategorie
-                                ? 'autre_option'
-                                : _categorieSelectionnee,
-                            hint: const Text(
-                              'Sélectionner une catégorie',
-                              style: TextStyle(
-                                color: AppColors.grisTexte,
-                                fontSize: 14,
-                              ),
-                            ),
-                            decoration: InputDecoration(
-                              fillColor: AppColors.blanc,
-                              filled: true,
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 12,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none,
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(
-                                  color: AppColors.grisClair,
-                                ),
-                              ),
-                            ),
-                            items: [
-                              // On affiche d'abord les catégories venues de Firestore
-                              ...listeCategories.map((cat) {
-                                return DropdownMenuItem<String>(
-                                  value: cat['nom'],
-                                  child: Text(
-                                    cat['nom']!,
-                                    style: const TextStyle(
-                                      color: AppColors.noir,
-                                    ),
-                                  ),
-                                );
-                              }),
-                              // On ajoute l'option magique tout en bas de la liste
-                              const DropdownMenuItem<String>(
-                                value: 'autre_option',
-                                child: Text(
-                                  '➕ Autre (Créer une catégorie...)',
-                                  style: TextStyle(
-                                    color: AppColors.orangePrincipal,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
-                            onChanged: (value) {
-                              setState(() {
-                                if (value == 'autre_option') {
-                                  _isNouvelleCategorie = true;
-                                  _categorieSelectionnee = null;
-                                } else {
-                                  _isNouvelleCategorie = false;
-                                  _categorieSelectionnee = value;
-                                }
-                              });
-                            },
+                      final nExistePasDansLaListe =
+                          _categorieSelectionnee != null &&
+                          !listeCategories.any(
+                            (cat) => cat['nom'] == _categorieSelectionnee,
+                          );
+                      return DropdownButtonFormField(
+                        initialValue: _categorieSelectionnee,
+                        hint: const Text(
+                          'Sélectionner une catégorie',
+                          style: TextStyle(
+                            color: AppColors.grisTexte,
+                            fontSize: 14,
                           ),
-
-                          // Si l'utilisateur a choisi "Autre", on fait apparaître le champ de saisie avec animation
-                          if (_isNouvelleCategorie) ...[
-                            const SizedBox(height: 12),
-                            CustomTextField(
-                              label: "Nom de la nouvelle catégorie",
-                              hintText:
-                                  "Ex: Électroménager, Outils, Jeux vidéo...",
-                              controller: _nouvelleCategorieController,
-                              validator: (val) => val == null || val.isEmpty
-                                  ? 'Veuillez saisir le nom de la catégorie'
-                                  : null,
+                        ),
+                        decoration: InputDecoration(
+                          fillColor: AppColors.blanc,
+                          filled: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide.none,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: const BorderSide(
+                              color: AppColors.grisClair,
                             ),
-                          ],
+                          ),
+                        ),
+                        items: [
+                          ...listeCategories.map((cat) {
+                            return DropdownMenuItem(
+                              value: cat['nom'],
+                              child: Text(
+                                cat['nom']!,
+                                style: const TextStyle(color: AppColors.noir),
+                              ),
+                            );
+                          }),
+                          if (nExistePasDansLaListe)
+                            DropdownMenuItem(
+                              value: _categorieSelectionnee,
+                              child: Text(
+                                '✨ $_categorieSelectionnee',
+                                style: const TextStyle(color: AppColors.noir),
+                              ),
+                            ),
                         ],
+                        onChanged: (value) {
+                          setState(() {
+                            _categorieSelectionnee = value;
+                          });
+                        },
+                        validator: (val) => val == null || val.isEmpty
+                            ? 'Veuillez choisir une catégorie'
+                            : null,
                       );
                     },
                     loading: () => const Center(
@@ -372,13 +385,9 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
                         color: AppColors.orangePrincipal,
                       ),
                     ),
-                    error: (err, stack) =>
-                        Text('Erreur de chargement des catégories : $err'),
+                    error: (err, stack) => Text('Erreur de chargement : $err'),
                   ),
-
-              const SizedBox(height: 32),
-
-              // Bouton Principal de Publication
+              const SizedBox(height: 32), // Bouton Principal de Publication
               CustomButton(
                 text: "Publier l'annonce",
                 isLoading: publishState.isLoading,
