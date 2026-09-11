@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import './routes/routes.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const CampusMarketApp());
 }
 
