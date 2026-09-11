@@ -1,6 +1,7 @@
 import 'package:campusmarket/features/auth/presentation/widgets/login_form.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/constants/colors.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -36,7 +37,7 @@ class Login extends StatelessWidget {
                         TextSpan(
                           text: "Market",
                           style: GoogleFonts.poppins(
-                            color: Colors.red,
+                            color: primaryColor,
                             fontSize: 30,
                             fontWeight: FontWeight.bold
                           )

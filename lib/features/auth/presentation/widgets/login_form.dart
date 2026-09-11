@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import '../../../../core/constants/colors.dart';
 
 
 class LoginForm extends StatefulWidget {
@@ -90,7 +90,7 @@ class _LoginFormState extends State<LoginForm> {
                 width: MediaQuery.of(context).size.width * 0.8,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: Colors.red,
+                  color: primaryColor,
                   borderRadius: BorderRadius.circular(30)
                 ),
                 child: Center(child: Text('Se connecter', style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold ),)),
@@ -101,7 +101,7 @@ class _LoginFormState extends State<LoginForm> {
             GestureDetector(
               child: Text(
                 'Pas de compte ? Créer un compte',
-                style: GoogleFonts.poppins(color: Colors.red)
+                style: GoogleFonts.poppins(color: primaryColor)
               ),
               onTap: ()=> context.go('/signin'),
             )

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/constants/colors.dart';
 
 class SigninForm extends StatefulWidget {
   const SigninForm({super.key});
@@ -14,7 +15,7 @@ class _SigninFormState extends State<SigninForm> {
 
   bool _isObscured = false;
 
-  void setIsObscured(){
+  void setIsObscured() {
     setState(() {
       _isObscured = !_isObscured;
     });
@@ -37,21 +38,22 @@ class _SigninFormState extends State<SigninForm> {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-              'Inscription',
-              style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 20),
+                'Inscription',
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
             ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
+            SizedBox(height: 30),
             TextFormField(
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.grey.shade100,
                 labelText: 'Nom',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10)
-                )
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
               validator: (String? value) {
                 return (value != null && !value.contains('@'))
@@ -59,15 +61,15 @@ class _SigninFormState extends State<SigninForm> {
                     : null;
               },
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: 10),
             TextFormField(
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.grey.shade100,
                 labelText: 'Prenom',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10)
-                )
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
               validator: (String? value) {
                 return (value != null && !value.contains('@'))
@@ -75,15 +77,15 @@ class _SigninFormState extends State<SigninForm> {
                     : null;
               },
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: 10),
             TextFormField(
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.grey.shade100,
                 labelText: 'Email',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10)
-                )
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
               validator: (String? value) {
                 return (value != null && !value.contains('@'))
@@ -91,7 +93,7 @@ class _SigninFormState extends State<SigninForm> {
                     : null;
               },
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: 10),
             TextFormField(
               obscureText: _isObscured,
               decoration: InputDecoration(
@@ -99,14 +101,14 @@ class _SigninFormState extends State<SigninForm> {
                 filled: true,
                 fillColor: Colors.grey.shade100,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10)
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 suffixIcon: IconButton(
                   onPressed: () => setIsObscured(),
                   icon: Icon(
-                  _isObscured ? Icons.visibility_off : Icons.visibility,
+                    _isObscured ? Icons.visibility_off : Icons.visibility,
+                  ),
                 ),
-                )
               ),
               validator: (String? value) {
                 return (value != null && value.isEmpty)
@@ -114,7 +116,7 @@ class _SigninFormState extends State<SigninForm> {
                     : null;
               },
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: 10),
             TextFormField(
               obscureText: _isObscured,
               decoration: InputDecoration(
@@ -122,14 +124,14 @@ class _SigninFormState extends State<SigninForm> {
                 filled: true,
                 fillColor: Colors.grey.shade100,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10)
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 suffixIcon: IconButton(
                   onPressed: () => setIsObscured(),
                   icon: Icon(
-                  _isObscured ? Icons.visibility_off : Icons.visibility,
+                    _isObscured ? Icons.visibility_off : Icons.visibility,
+                  ),
                 ),
-                )
               ),
               validator: (String? value) {
                 return (value != null && value.isEmpty)
@@ -137,27 +139,35 @@ class _SigninFormState extends State<SigninForm> {
                     : null;
               },
             ),
-            SizedBox(height: 30,),
+            SizedBox(height: 30),
             GestureDetector(
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.8,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(30)
+                  color: primaryColor,
+                  borderRadius: BorderRadius.circular(30),
                 ),
-                child: Center(child: Text("S'inscrire", style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold ),)),
+                child: Center(
+                  child: Text(
+                    "S'inscrire",
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
-              onTap: (){},
+              onTap: () {},
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: 10),
             GestureDetector(
               child: Text(
                 'Vous avez deja un compte ? Se connecter',
-                style: GoogleFonts.poppins(color: Colors.red)
+                style: GoogleFonts.poppins(color: primaryColor),
               ),
               onTap: () => context.go('/login'),
-            )
+            ),
           ],
         ),
       ),
