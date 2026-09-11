@@ -146,7 +146,7 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
       }
     });
 
-    final publishState = ref.watch(publishProvider);
+    final publishState = ref. watch(publishProvider);
 
     return Scaffold(
       appBar: AppBar(

@@ -1,37 +1,45 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloudinary/cloudinary.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../features/annonces/data/models/articles_models.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db;
-  final FirebaseStorage _storage;
+  final Cloudinary _cloudinary;
 
-  FirestoreService({FirebaseFirestore? firestore, FirebaseStorage? storage})
+  FirestoreService({FirebaseFirestore? firestore})
     : _db = firestore ?? FirebaseFirestore.instance,
-      _storage = storage ?? FirebaseStorage.instance;
+      // Initialisation de Cloudinary avec vos identifiants du tableau de bord
+      _cloudinary = Cloudinary.signedConfig(
+        apiKey: dotenv.env['CLOUDINARY_API_KEY'] ?? '',
+        apiSecret: dotenv.env['CLOUDINARY_API_SECRET'] ?? '',
+        cloudName: dotenv.env['CLOUDINARY_CLOUD_NAME'] ?? '',
+      );
 
   // -------------------- GESTION DE L'IMAGE --------------------
   // TELEVERSEMENT SUR FIRESTORE
   Future<String> uploadArticleImage(File imageFile, String vendeurId) async {
     try {
-      String fileName =
-          '${vendeurId}_${DateTime.now().millisecondsSinceEpoch}.jpg'; // No; unique pour l'image base sur timestamp
-      Reference ref = _storage
-          .ref()
-          .child('articles_photo')
-          .child(fileName); // reference dans le dossier 'articles_photos'
+      // Préparation de la requête de téléversement
+      final response = await _cloudinary.upload(
+        file: imageFile.path,
+        fileBytes: imageFile.readAsBytesSync(),
+        resourceType: CloudinaryResourceType.image,
+        folder:
+            "articles_photos", // Crée automatiquement un dossier dans Cloudinary
+        fileName: '${vendeurId}_${DateTime.now().millisecondsSinceEpoch}',
+      );
 
-      // TELEVERSEMENT DE L'IMAGE
-      UploadTask uploadTask = ref.putFile(imageFile);
-      TaskSnapshot snapshot = await uploadTask;
-
-      // RECUPERATION DE L'URL PUBLIQUE
-      String downloadUrl = await snapshot.ref.getDownloadURL();
-      return downloadUrl;
+      // Si le téléversement réussit, on récupère l'URL sécurisée (https)
+      if (response.isSuccessful && response.secureUrl != null) {
+        return response.secureUrl!;
+      } else {
+        throw Exception(response.error ?? "Erreur inconnue Cloudinary");
+      }
     } catch (e) {
-      throw Exception("Eche de l'envoi de la photo: $e");
+      throw Exception("Échec de l'envoi de la photo sur Cloudinary : $e");
     }
   }
 
