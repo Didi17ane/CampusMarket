@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SigninForm extends StatefulWidget {
@@ -155,7 +156,7 @@ class _SigninFormState extends State<SigninForm> {
                 'Vous avez deja un compte ? Se connecter',
                 style: GoogleFonts.poppins(color: Colors.red)
               ),
-              onTap: (){},
+              onTap: () => context.go('/login'),
             )
           ],
         ),

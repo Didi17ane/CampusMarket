@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -100,7 +103,7 @@ class _LoginFormState extends State<LoginForm> {
                 'Pas de compte ? Créer un compte',
                 style: GoogleFonts.poppins(color: Colors.red)
               ),
-              onTap: (){},
+              onTap: ()=> context.go('/signin'),
             )
           ],
         ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import './features/auth/presentation/screens/signin.dart';
+import './routes/routes.dart';
 
 void main() {
-  runApp(const SignIn());
+  runApp(const CampusMarketApp());
 }
 
 class CampusMarketApp extends StatelessWidget {
@@ -10,10 +10,8 @@ class CampusMarketApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'CampusMarket',
-      debugShowCheckedModeBanner: false,
-      home: const Scaffold(body: Center(child: Text('CampusMarket 🚀'))),
+    return MaterialApp.router(
+      routerConfig: router,
     );
   }
 }
