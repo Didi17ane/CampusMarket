@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/mes_annonces_provider.dart';
 import '../widgets/annonce_card.dart';
 import '../../../../core/widgets/app_drawer.dart';
+import 'package:campusmarket/features/annonces/presentation/screens/publier_annonce_screen.dart';
 
 class MesAnnoncesScreen extends ConsumerWidget {
   const MesAnnoncesScreen({super.key});
@@ -68,7 +69,12 @@ class MesAnnoncesScreen extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFFFF6B00),
         onPressed: () {
-          // TODO: naviguer vers l'écran de publication (T-07)
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const PublierAnnonceScreen(),
+            ),
+          );
         },
         child: const Icon(Icons.add, color: Colors.white),
       ),

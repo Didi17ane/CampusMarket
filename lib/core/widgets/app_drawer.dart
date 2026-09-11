@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../features/auth/presentation/providers/user_provider.dart';
 import '../providers/navigation_provider.dart';
+import 'package:campusmarket/features/annonces/presentation/screens/publier_annonce_screen.dart';
 
 /// Menu latéral (drawer), conforme à la maquette (page "Menu latéral").
 /// Regroupe les mêmes destinations que la bottom nav + Aide & support et
@@ -85,7 +86,13 @@ class AppDrawer extends ConsumerWidget {
           _DrawerItem(
             icon: Icons.add_circle_outline,
             label: 'Publier une annonce',
-            onTap: () => _bientotDisponible(context),
+            onTap: () {
+              Navigator.pop(context); // ferme le drawer
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const PublierAnnonceScreen()),
+              );
+            },
           ),
           _DrawerItem(
             icon: Icons.storefront_outlined,

@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
+
 
 /// Onglet actif de la bottom nav (0 = Annonces, 1 = Profil pour l'instant).
 /// Permet à n'importe quel écran (Profil, Drawer...) de changer d'onglet
