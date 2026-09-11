@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../providers/user_provider.dart';
 import 'modifier_profil_screen.dart';
-import '../../../mes_annonces/presentation/screens/mes_annonces_screen.dart';
+import '../../../../core/providers/navigation_provider.dart';
+import '../../../../core/widgets/app_drawer.dart';
 
 class ProfilScreen extends ConsumerWidget {
   const ProfilScreen({super.key});
@@ -13,6 +14,7 @@ class ProfilScreen extends ConsumerWidget {
     final userAsync = ref.watch(currentUserProvider);
 
     return Scaffold(
+      drawer: const AppDrawer(),
       body: userAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, _) => Center(child: Text('Erreur : $err')),
@@ -29,7 +31,23 @@ class ProfilScreen extends ConsumerWidget {
                 expandedHeight: 220,
                 pinned: true,
                 automaticallyImplyLeading: false,
-                title: const Text('Mon profil', style: TextStyle(color: Colors.white)),
+                iconTheme: const IconThemeData(color: Colors.white),
+                title: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset('assets/icon/icon.png', width: 24, height: 24),
+                    const SizedBox(width: 8),
+                    const Text('Mon profil', style: TextStyle(color: Colors.white)),
+                  ],
+                ),
+                actions: [
+                  Builder(
+                    builder: (context) => IconButton(
+                      icon: const Icon(Icons.menu, color: Colors.white),
+                      onPressed: () => Scaffold.of(context).openDrawer(),
+                    ),
+                  ),
+                ],
                 flexibleSpace: FlexibleSpaceBar(
                   background: Container(
                     color: Colors.black,
@@ -75,12 +93,7 @@ class ProfilScreen extends ConsumerWidget {
                     _ProfilTile(
                       label: 'Mes produits / annonces',
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const MesAnnoncesScreen(),
-                          ),
-                        );
+                        ref.read(currentTabIndexProvider.notifier).state = 0;
                       },
                     ),
                     _ProfilTile(

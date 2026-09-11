@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/mes_annonces_provider.dart';
 import '../widgets/annonce_card.dart';
+import '../../../../core/widgets/app_drawer.dart';
 
 class MesAnnoncesScreen extends ConsumerWidget {
   const MesAnnoncesScreen({super.key});
@@ -11,17 +12,34 @@ class MesAnnoncesScreen extends ConsumerWidget {
     final annoncesAsync = ref.watch(mesAnnoncesProvider);
 
     return Scaffold(
+      drawer: const AppDrawer(),
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: annoncesAsync.when(
-          data: (annonces) => Text(
-            'Mes annonces\n${annonces.length} annonce${annonces.length > 1 ? 's' : ''} publiée${annonces.length > 1 ? 's' : ''}',
-            style: const TextStyle(fontSize: 16),
+        automaticallyImplyLeading: false,
+        actions: [
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
           ),
-          loading: () => const Text('Mes annonces'),
-          error: (_, __) => const Text('Mes annonces'),
+        ],
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset('assets/icon/icon.png', width: 24, height: 24),
+            const SizedBox(width: 8),
+            annoncesAsync.when(
+              data: (annonces) => Text(
+                'Mes annonces\n${annonces.length} annonce${annonces.length > 1 ? 's' : ''} publiée${annonces.length > 1 ? 's' : ''}',
+                style: const TextStyle(fontSize: 16),
+              ),
+              loading: () => const Text('Mes annonces'),
+              error: (_, __) => const Text('Mes annonces'),
+            ),
+          ],
         ),
       ),
       body: annoncesAsync.when(
