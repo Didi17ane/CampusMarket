@@ -10,10 +10,11 @@ class ArticlesModels {
   categorieId; // Lien vers CategoriesModels.id : utilisé par les filtres (T-03) et la recherche (T-10)
   String
   statut; // 'active' ou 'vendue' : utilisé par l'écran "Mes annonces" (T-09)
-
+  List<String> imagesDetails = [];
   ArticlesModels({
     this.id = '',
     required this.photo,
+    this.imagesDetails = const[],
     required this.nameArticle,
     required this.description,
     required this.prix,

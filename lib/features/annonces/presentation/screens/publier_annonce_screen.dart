@@ -26,6 +26,7 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
 
   String? _categorieSelectionnee;
   File? _imageSelectionnee;
+  List<File> _imagesDetailsSelectionnees = [];
   final ImagePicker _picker = ImagePicker();
 
   @override
@@ -111,8 +112,33 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
             description: _descriptionController.text.trim(),
             prix: prix,
             categorieSaisie: _categorieSelectionnee!,
-            imageFile: _imageSelectionnee,
+            imageFile: _imageSelectionnee!,
+            imagesSecondaires: _imagesDetailsSelectionnees,
           );
+    }
+  }
+
+  // Fonction pour ajouter plusieurs photos de détails en même temps
+  Future<void> _choisirImageSecondaire() async {
+    try {
+      // Ouvre la galerie avec l'option de sélection multiple
+      final List<XFile> images = await _picker.pickMultiImage();
+
+      if (images.isNotEmpty) {
+        setState(() {
+          // Convertit les XFile en File
+          _imagesDetailsSelectionnees.addAll(
+            images.map((xFile) => File(xFile.path)).toList(),
+          );
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erreur lors de la sélection des images : $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -134,6 +160,7 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
         setState(() {
           _imageSelectionnee = null;
           _categorieSelectionnee = null;
+          _imagesDetailsSelectionnees = [];
         });
       } else if (next.errorMessage != null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -228,7 +255,100 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
                         ),
                 ),
               ),
+
+              const SizedBox(height: 12),
+
+              // Affichage dynamique uniquement si la photo principale est sélectionnée
+              if (_imageSelectionnee != null) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Photos de détails (${_imagesDetailsSelectionnees.length})',
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                        color: AppColors.grisTexte,
+                      ),
+                    ),
+                    TextButton.icon(
+                      onPressed: _choisirImageSecondaire,
+                      icon: const Icon(
+                        Icons.add_a_photo,
+                        size: 16,
+                        color: AppColors.orangePrincipal,
+                      ),
+                      label: const Text(
+                        'Ajouter plus',
+                        style: TextStyle(
+                          color: AppColors.orangePrincipal,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                // Carrousel sous forme de liste horizontale (ListView)
+                if (_imagesDetailsSelectionnees.isNotEmpty)
+                  SizedBox(
+                    height: 90,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _imagesDetailsSelectionnees.length,
+                      itemBuilder: (context, index) {
+                        return Stack(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(right: 8),
+                              width: 90,
+                              height: 90,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: AppColors.grisClair),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(7),
+                                child: Image.file(
+                                  _imagesDetailsSelectionnees[index],
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            // Bouton pour supprimer une photo du carrousel si l'étudiant s'est trompé
+                            Positioned(
+                              top: 2,
+                              right: 10,
+                              child: GestureDetector(
+                                onTap: () => setState(
+                                  () => _imagesDetailsSelectionnees.removeAt(
+                                    index,
+                                  ),
+                                ),
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.black54,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  padding: const EdgeInsets.all(4),
+                                  child: const Icon(
+                                    Icons.close,
+                                    size: 12,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+              ],
               const SizedBox(height: 24),
+              // ... Avant le CustomTextField du Titre de l'annonce ...
 
               // Champ : Titre de l'annonce
               CustomTextField(
