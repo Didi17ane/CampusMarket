@@ -37,7 +37,10 @@ class ProfilScreen extends ConsumerWidget {
                   children: [
                     Image.asset('assets/icon/icon.png', width: 24, height: 24),
                     const SizedBox(width: 8),
-                    const Text('Mon profil', style: TextStyle(color: Colors.white)),
+                    const Text(
+                      'Mon profil',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ],
                 ),
                 actions: [
@@ -74,7 +77,10 @@ class ProfilScreen extends ConsumerWidget {
                     const SizedBox(height: 16),
                     Text(
                       '${user.name} ${user.lastname}',
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(user.email, style: TextStyle(color: Colors.grey[600])),
@@ -93,7 +99,7 @@ class ProfilScreen extends ConsumerWidget {
                     _ProfilTile(
                       label: 'Mes produits / annonces',
                       onTap: () {
-                        ref.read(currentTabIndexProvider.notifier).state = 0;
+                        ref.read(currentTabIndexProvider.notifier).state = 2;
                       },
                     ),
                     _ProfilTile(
@@ -141,9 +147,9 @@ class ProfilScreen extends ConsumerWidget {
   }
 
   void _bientotDisponible(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Bientôt disponible')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Bientôt disponible')));
   }
 
   String _initiales(String name, String lastname) {

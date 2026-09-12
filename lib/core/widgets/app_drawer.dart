@@ -42,9 +42,13 @@ class AppDrawer extends ConsumerWidget {
                     backgroundColor: const Color(0xFFFF6B00),
                     child: Text(
                       user != null
-                          ? '${user.name.isNotEmpty ? user.name[0] : ''}${user.lastname.isNotEmpty ? user.lastname[0] : ''}'.toUpperCase()
+                          ? '${user.name.isNotEmpty ? user.name[0] : ''}${user.lastname.isNotEmpty ? user.lastname[0] : ''}'
+                                .toUpperCase()
                           : '?',
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -54,14 +58,22 @@ class AppDrawer extends ConsumerWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          user != null ? '${user.name} ${user.lastname}' : 'Non connecté',
-                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          user != null
+                              ? '${user.name} ${user.lastname}'
+                              : 'Non connecté',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                           overflow: TextOverflow.ellipsis,
                         ),
                         if (user != null)
                           Text(
                             user.email,
-                            style: const TextStyle(color: Colors.white70, fontSize: 12),
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 12,
+                            ),
                             overflow: TextOverflow.ellipsis,
                           ),
                       ],
@@ -97,7 +109,7 @@ class AppDrawer extends ConsumerWidget {
             label: 'Mes annonces',
             onTap: () {
               Navigator.pop(context);
-              ref.read(currentTabIndexProvider.notifier).state = 0;
+              ref.read(currentTabIndexProvider.notifier).state = 2;
             },
           ),
           _DrawerItem(
@@ -105,7 +117,7 @@ class AppDrawer extends ConsumerWidget {
             label: 'Mon profil',
             onTap: () {
               Navigator.pop(context);
-              ref.read(currentTabIndexProvider.notifier).state = 1;
+              ref.read(currentTabIndexProvider.notifier).state = 3;
             },
           ),
           const Divider(),
@@ -126,7 +138,10 @@ class AppDrawer extends ConsumerWidget {
           const Spacer(),
           const Padding(
             padding: EdgeInsets.all(16),
-            child: Text('CampusMarket v1.0', style: TextStyle(color: Colors.grey, fontSize: 12)),
+            child: Text(
+              'CampusMarket v1.0',
+              style: TextStyle(color: Colors.grey, fontSize: 12),
+            ),
           ),
         ],
       ),
@@ -135,9 +150,9 @@ class AppDrawer extends ConsumerWidget {
 
   void _bientotDisponible(BuildContext context) {
     Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Bientôt disponible')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Bientôt disponible')));
   }
 }
 
