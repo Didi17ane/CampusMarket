@@ -35,7 +35,8 @@ class PublishNotifier extends StateNotifier<PublishState> {
     required String description,
     required int prix,
     required String categorieSaisie, // le texte selectionne ou tape
-    File? imageFile,
+    required File imageFile,
+    List<File> imagesSecondaires = const [],
   }) async {
     if (_currentUserId == null) {
       state = PublishState(
@@ -50,11 +51,20 @@ class PublishNotifier extends StateNotifier<PublishState> {
 
       // GESTION DE l'IMAGE SUR FIRESTORAGE
 
-      if (imageFile != null) {
-        urlPhoto = await _firestoreService.uploadArticleImage(
-          imageFile,
-          _currentUserId,
+      // 1. Téléversement de l'image principale
+      urlPhoto = await _firestoreService.uploadArticleImage(
+        imageFile,
+        _currentUserId,
+      );
+
+      // 2. Téléversement des images secondaires en parallèle
+      List<String> urlsSecondaires = [];
+      for (File file in imagesSecondaires) {
+        String url = await _firestoreService.uploadArticleImage(
+          file,
+          _currentUserId!,
         );
+        urlsSecondaires.add(url);
       }
 
       //GESTION DE LA COLLECTION CATEGORIE(Cherche ou cree)
@@ -64,6 +74,7 @@ class PublishNotifier extends StateNotifier<PublishState> {
       // CRTEACTION DU MODEL FINAL
       final nouvelArticle = ArticlesModels(
         photo: urlPhoto,
+        imagesDetails: urlsSecondaires,
         nameArticle: name,
         description: description,
         prix: prix,
