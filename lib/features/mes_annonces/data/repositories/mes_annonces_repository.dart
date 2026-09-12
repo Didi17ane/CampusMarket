@@ -29,4 +29,8 @@ class MesAnnoncesRepository {
   Future<void> updateStatut(String articleId, String statut) {
     return _collection.doc(articleId).update({'statut': statut});
   }
+
+  Future<void> updateAnnonce(ArticlesModels annonce) {
+    return _collection.doc(annonce.id).update(annonce.toJson());
+  }
 }

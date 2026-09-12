@@ -32,7 +32,18 @@ class AnnonceCard extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: annonce.photo.isNotEmpty
-                ? Image.network(annonce.photo, width: 64, height: 64, fit: BoxFit.cover)
+                ? Image.network(
+                    annonce.photo,
+                    width: 64,
+                    height: 64,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      width: 64,
+                      height: 64,
+                      color: Colors.grey[200],
+                      child: const Icon(Icons.broken_image_outlined, color: Colors.grey),
+                    ),
+                  )
                 : Container(
                     width: 64,
                     height: 64,

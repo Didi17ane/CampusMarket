@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../providers/mes_annonces_provider.dart';
 import '../widgets/annonce_card.dart';
 import '../../../../core/widgets/app_drawer.dart';
-import 'package:campusmarket/features/annonces/presentation/screens/publier_annonce_screen.dart';
+import 'modifier_annonce_screen.dart';
 
 class MesAnnoncesScreen extends ConsumerWidget {
   const MesAnnoncesScreen({super.key});
@@ -58,7 +59,12 @@ class MesAnnoncesScreen extends ConsumerWidget {
               return AnnonceCard(
                 annonce: annonce,
                 onEdit: () {
-                  // TODO: naviguer vers l'écran d'édition (réutilise le formulaire T-07 de Maniga)
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ModifierAnnonceScreen(annonce: annonce),
+                    ),
+                  );
                 },
                 onDelete: () => _confirmerSuppression(context, ref, annonce.id),
               );
@@ -68,14 +74,7 @@ class MesAnnoncesScreen extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFFFF6B00),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const PublierAnnonceScreen(),
-            ),
-          );
-        },
+        onPressed: () => context.push('/publier'),
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
