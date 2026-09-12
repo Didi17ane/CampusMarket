@@ -12,10 +12,7 @@ class CommentRepositoryImpl implements CommentRepository {
   }
 
   @override
-  Stream<List<CommentairesModels>> getCommentByArticleIdAndAuteurId(
-    String articleId,
-    String auteurId,
-  ) {
-    return remote.getCommentByArticleIdAndAuteurId(articleId, auteurId);
+  Stream<List<CommentairesModels>> getCommentByArticleId(String articleId) {
+    return remote.getCommentByArticleId(articleId);
   }
 }

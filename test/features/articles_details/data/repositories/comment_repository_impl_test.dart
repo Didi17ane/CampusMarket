@@ -2,8 +2,6 @@ import 'package:campusmarket/core/constants/firestore_collections.dart';
 import 'package:campusmarket/features/annonces/data/models/commentaires_models.dart';
 import 'package:campusmarket/features/articles_details/data/data_sources/remote_comment_data_source.dart';
 import 'package:campusmarket/features/articles_details/data/repositories/comment_repository_impl.dart';
-import 'package:campusmarket/features/articles_details/domain/repositories/comment_repository.dart';
-import 'package:campusmarket/features/articles_details/presentation/providers/comment_provider.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -14,10 +12,7 @@ void main() {
     final commentRepository = CommentRepositoryImpl(remote: remote);
 
     test("émission de commentaires en temps réel", () async {
-      final stream = commentRepository.getCommentByArticleIdAndAuteurId(
-        "articleId",
-        "auteurId",
-      );
+      final stream = commentRepository.getCommentByArticleId("articleId");
 
       expectLater(
         stream,
@@ -45,10 +40,7 @@ void main() {
         'auteurId': 'auteurId',
       });
 
-      final stream = commentRepository.getCommentByArticleIdAndAuteurId(
-        "articleId",
-        "auteurId",
-      );
+      final stream = commentRepository.getCommentByArticleId("articleId");
 
       final commentaires =
           await stream.first; // récupère juste la 1ère émission

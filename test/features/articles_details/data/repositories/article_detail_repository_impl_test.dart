@@ -5,7 +5,7 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group(" Recupération des Articles et commentaire", () {
+  group(" Recupération des Articles ", () {
     final firestore = FakeFirebaseFirestore();
     final remote = RemoteArticleDetailDataSourceImpl(firestore: firestore);
     final articleDetailRepositoryImpl = ArticleDetailRepositoryImpl(

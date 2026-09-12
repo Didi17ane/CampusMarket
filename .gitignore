@@ -121,3 +121,5 @@ app.*.symbols
 .fvmrc
 
 .vscode/settings.json
+# Widget Preview related
+.widget_preview/

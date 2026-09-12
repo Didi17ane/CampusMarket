@@ -4,10 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class RemoteCommentsDataSource {
   Future<void> addComment(CommentairesModels comment);
-  Stream<List<CommentairesModels>> getCommentByArticleIdAndAuteurId(
-    String articleId,
-    String auteurId,
-  );
+  Stream<List<CommentairesModels>> getCommentByArticleId(String articleId);
 }
 
 class RemoteCommentsDataSourceImpl implements RemoteCommentsDataSource {
@@ -16,18 +13,18 @@ class RemoteCommentsDataSourceImpl implements RemoteCommentsDataSource {
 
   @override
   Future<void> addComment(CommentairesModels comment) async {
-    await firestore.collection(kCommentairesCollection).add(comment.toJson());
+    final docRef = firestore
+        .collection(kCommentairesCollection)
+        .doc(); //génère un  document avec ID seulement côté client
+    comment.id = docRef.id;
+    await docRef.set(comment.toJson());
   }
 
   @override
-  Stream<List<CommentairesModels>> getCommentByArticleIdAndAuteurId(
-    String articleId,
-    String auteurId,
-  ) {
+  Stream<List<CommentairesModels>> getCommentByArticleId(String articleId) {
     return firestore
         .collection(kCommentairesCollection)
         .where('produitId', isEqualTo: articleId)
-        .where('auteurId', isEqualTo: auteurId)
         .snapshots()
         .map(
           (snapshot) => snapshot.docs

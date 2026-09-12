@@ -18,16 +18,13 @@ final commentRepositoryProvider = Provider<CommentRepository>((ref) {
 });
 
 class CommentNotifier extends StreamNotifier<List<CommentairesModels>> {
-  final ({String articleId, String auteurId}) arg;
-  CommentNotifier(this.arg);
+  final String produitId;
+  CommentNotifier(this.produitId);
 
   @override
   Stream<List<CommentairesModels>> build() {
     final repository = ref.watch(commentRepositoryProvider);
-    return repository.getCommentByArticleIdAndAuteurId(
-      arg.articleId,
-      arg.auteurId,
-    );
+    return repository.getCommentByArticleId(produitId);
   }
 
   Future<void> addComment(CommentairesModels comment) async {
@@ -42,5 +39,5 @@ final commentNotifierProvider =
     StreamNotifierProvider.family<
       CommentNotifier,
       List<CommentairesModels>,
-      ({String articleId, String auteurId})
+      String
     >(CommentNotifier.new);

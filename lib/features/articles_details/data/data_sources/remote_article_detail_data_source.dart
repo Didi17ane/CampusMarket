@@ -1,6 +1,5 @@
 import 'package:campusmarket/core/constants/firestore_collections.dart';
 import 'package:campusmarket/features/annonces/data/models/articles_models.dart';
-import 'package:campusmarket/features/annonces/data/models/commentaires_models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class RemoteArticleDetailDataSource {

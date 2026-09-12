@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import './routes/routes.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const CampusMarketApp());
+  runApp(ProviderScope(child: const CampusMarketApp()));
 }
 
 class CampusMarketApp extends StatelessWidget {
@@ -13,10 +15,6 @@ class CampusMarketApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'CampusMarket',
-      debugShowCheckedModeBanner: false,
-      home: const Scaffold(body: Center(child: Text('CampusMarket 🚀'))),
-    );
+    return MaterialApp.router(routerConfig: router);
   }
 }
