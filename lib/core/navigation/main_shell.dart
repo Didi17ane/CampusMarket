@@ -5,6 +5,7 @@ import '../providers/navigation_provider.dart';
 import '../widgets/coming_soon_screen.dart';
 import '../../features/auth/presentation/screens/profil_screen.dart';
 import '../../features/mes_annonces/presentation/screens/mes_annonces_screen.dart';
+import '../../features/annonces/presentation/screens/catalogue_screen.dart';
 
 /// Bottom nav principale de l'app, conforme à la maquette (5 icônes) :
 /// Catalogue, Rechercher, Publier, Mes annonces, Profil.
@@ -25,7 +26,7 @@ class MainShell extends ConsumerWidget {
 
   // 4 vrais onglets seulement (Publier est géré à part, voir onTap).
   static const screens = [
-    ComingSoonScreen(titre: 'Catalogue'),
+    CatalogueScreen(),
     ComingSoonScreen(titre: 'Rechercher'),
     MesAnnoncesScreen(),
     ProfilScreen(),
@@ -58,10 +59,19 @@ class MainShell extends ConsumerWidget {
           ref.read(currentTabIndexProvider.notifier).state = newRealIndex;
         },
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Catalogue'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Recherche'),
-          BottomNavigationBarItem(icon: Icon(Icons.add_circle, color: Color(0xFFFF6B00)), label: 'Publier'),
-          BottomNavigationBarItem(icon: Icon(Icons.storefront), label: 'Annonces'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            label: 'Catalogue',
+          ),
+          // BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Recherche'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_circle, color: Color(0xFFFF6B00)),
+            label: 'Publier',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.storefront),
+            label: 'Annonces',
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ],
       ),

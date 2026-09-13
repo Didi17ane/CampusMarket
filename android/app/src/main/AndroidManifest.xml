@@ -1,9 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
-<<<<<<< HEAD
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-=======
->>>>>>> 2795fe755f01559b7821f03cbd26e3ec3e5534c2
     <application
         android:label="campusmarket"
         android:name="${applicationName}"
