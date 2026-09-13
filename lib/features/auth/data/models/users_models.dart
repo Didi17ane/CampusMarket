@@ -4,7 +4,7 @@ class Users {
   String lastname;
   String email;
   String phoneNumber;
-  String photo;
+  String? photo;
 
   Users({
     this.id = '',
@@ -12,7 +12,7 @@ class Users {
     required this.lastname,
     required this.email,
     required this.phoneNumber,
-    required this.photo,
+    this.photo,
   });
 
   Map<String, dynamic> toJson() => {
