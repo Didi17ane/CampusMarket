@@ -1,4 +1,4 @@
-import 'package:campusmarket/features/auth/presentation/widgets/signin_form.dart';
+import 'package:campusmarket/features/auth/presentation/widgets/signup_form.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

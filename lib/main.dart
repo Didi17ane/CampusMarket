@@ -27,7 +27,7 @@ void main() async {
   );
 }
 
-class CampusMarketApp extends StatelessWidget {
+class CampusMarketApp extends ConsumerWidget {
   const CampusMarketApp({super.key});
 
   @override
