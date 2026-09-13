@@ -19,9 +19,7 @@ void main() async {
 
   runApp(
     ProviderScope(
-      overrides: [
-        currentUserIdProvider.overrideWithValue(kTestUserId),
-      ],
+      overrides: [currentUserIdProvider.overrideWithValue(kTestUserId)],
       child: const CampusMarketApp(),
     ),
   );
@@ -31,7 +29,8 @@ class CampusMarketApp extends ConsumerWidget {
   const CampusMarketApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final goRouter = ref.watch(routerProvider);
     return MaterialApp.router(
       title: 'CampusMarket',
       debugShowCheckedModeBanner: false,
@@ -56,9 +55,11 @@ class CampusMarketApp extends ConsumerWidget {
             fontSize: 20,
             color: Colors.white,
           ),
+          backgroundColor: Colors.black,
         ),
       ),
-      routerConfig: router,
+      routerConfig: goRouter,
     );
   }
 }
+ 

@@ -11,48 +11,53 @@ class Login extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: SafeArea(
-          child: Container(
-            color: Colors.black,
-            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height *0.1),
-            child: Center(
-              child: Column(
-                children: [
-                  Image.asset(
-                    'assets/images/Logo_Campus_market.png',
-                    width: 100,
-                    height: 100,
-                  ),
-                  SizedBox(height: 20),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "Campus",
-                          style: GoogleFonts.poppins(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold
+          child: SingleChildScrollView(
+            child: Container(
+              color: Colors.black,
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * 0.1,
+              ),
+              child: Center(
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/images/Logo_Campus_market.png',
+                      width: 100,
+                      height: 100,
+                    ),
+                    SizedBox(height: 20),
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Campus",
+                            style: GoogleFonts.poppins(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        TextSpan(
-                          text: "Market",
-                          style: GoogleFonts.poppins(
-                            color: primaryColor,
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold
-                          )
-                        )
-                      ]
+                          TextSpan(
+                            text: "Market",
+                            style: GoogleFonts.poppins(
+                              color: primaryColor,
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Text("Achat, vente et echange d'objet de seconde main",
-                    style: GoogleFonts.poppins(
-                      color: Colors.white
+                    Text(
+                      "Achat, vente et echange d'objet de seconde main",
+                      style: GoogleFonts.poppins(color: Colors.white),
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  LoginForm()
-                ],
+                    SizedBox(height: 20),
+                    LoginForm(),
+                  ],
+                ),
               ),
             ),
           ),

@@ -29,7 +29,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     _emailUserController.dispose();
     _passwordUserController.dispose();
 
@@ -149,6 +149,7 @@ class _LoginFormState extends State<LoginForm> {
                 },
               ),
               SizedBox(height: 10),
+
               GestureDetector(
                 child: Text(
                   'Pas de compte ? Créer un compte',
