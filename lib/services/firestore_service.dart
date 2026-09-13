@@ -32,7 +32,7 @@ class FirestoreService {
         fileName: '${vendeurId}_${DateTime.now().millisecondsSinceEpoch}',
       );
 
-      // Si le téléversement réussit, on récupère l'URL sécurisée (https)
+      // Si le téléversement réussit, on récupère l'URL
       if (response.isSuccessful && response.secureUrl != null) {
         return response.secureUrl!;
       } else {
@@ -79,7 +79,7 @@ class FirestoreService {
       return snapshot.docs.map((doc) {
         return {'id': doc.id, 'nom': (doc.data()['nom'] ?? '').toString()};
       }).toList();
-    }); 
+    });
   }
 
   /// --------------------  GESTION DES ARTICLES --------------------

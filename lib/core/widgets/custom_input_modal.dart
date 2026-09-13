@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constants/theme_contants.dart'; // Ajustez selon votre arborescence réelle
+import '../constants/theme_contants.dart';
 import 'custom_text_field.dart';
 import 'custom_button.dart';
 
@@ -64,11 +64,9 @@ class _CustomInputModalState extends State<CustomInputModal> {
         right: 20,
         bottom: MediaQuery.of(context).viewInsets.bottom + 24,
       ),
-      // CORRECTION : On force une contrainte de largeur finie via cette boite
+
       child: SizedBox(
-        width: MediaQuery.of(
-          context,
-        ).size.width, // Donne la largeur exacte de l'écran
+        width: MediaQuery.of(context).size.width,
         child: SingleChildScrollView(
           child: Form(
             key: _modalFormKey,

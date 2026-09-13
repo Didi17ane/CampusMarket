@@ -348,8 +348,7 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
                   ),
               ],
               const SizedBox(height: 24),
-              // ... Avant le CustomTextField du Titre de l'annonce ...
-
+              
               // Champ : Titre de l'annonce
               CustomTextField(
                 label: "Titre de l'annonce",

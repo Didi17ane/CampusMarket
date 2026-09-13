@@ -7,7 +7,7 @@ import './routes/routes.dart';
 import 'firebase_options.dart';
 import 'core/providers/auth_providers.dart';
 
-// ⚠️ ID UTILISATEUR DE TEST — uniquement pour visualiser Profil/Mes annonces
+// ID UTILISATEUR DE TEST — uniquement pour visualiser Profil/Mes annonces
 // avant que T-01 (Auth) soit terminé. À retirer dès que la vraie connexion
 // existe : il suffira de supprimer ce override.
 const String kTestUserId = 'vendeur_etudiant_id_999';
