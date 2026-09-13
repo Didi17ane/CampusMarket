@@ -33,7 +33,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
-      GoRoute(path: '/', builder: (context, state) => TestConnect()),
+     // GoRoute(path: '/', builder: (context, state) => TestConnect()),
       GoRoute(path: '/login', builder: (context, state) => const Login()),
 
       GoRoute(path: '/signup', builder: (context, state) => const SignIn()),
@@ -43,7 +43,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const ProfilScreen(),
       ),
       GoRoute(
-        path: '/mes-annonces',
+        path: '/',
         builder: (context, state) => const MesAnnoncesScreen(),
       ),
       GoRoute(

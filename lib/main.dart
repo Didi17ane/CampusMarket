@@ -62,4 +62,3 @@ class CampusMarketApp extends ConsumerWidget {
     );
   }
 }
- 
