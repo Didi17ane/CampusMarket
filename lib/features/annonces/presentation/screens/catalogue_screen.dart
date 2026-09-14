@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../data/repositories/annonces_repository.dart';
 import '../../data/repositories/categories_repository.dart';
-import '../../../auth/data/models/articles_models.dart';
-import '../../../annonces/data/models/categories_models.dart';
+import '../../data/models/articles_models.dart';
+import '../../data/models/categories_models.dart';
 import '../widgets/product_card.dart';
-import '../../../../core/widgets/app_header.dart';
 import '../../../../core/widgets/search_bar_widget.dart';
 
 class CatalogueScreen extends StatefulWidget {
@@ -46,6 +45,11 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
     final idsConnus = categories.map((c) => c.id).toSet();
 
     return produits.where((p) {
+      // on cache les articles vendus, directement ici dans l'écran
+      // (si le champ statut n'existe pas, on considère l'article actif par défaut)
+      final statut = p.statut.isEmpty ? 'active' : p.statut;
+      if (statut == 'vendue') return false;
+
       if (_categorieSelectionnee != null) {
         if (_categorieSelectionnee == _autresCategorieId) {
           final estAutres = p.categorieId.isEmpty || !idsConnus.contains(p.categorieId);
@@ -59,7 +63,6 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
       final max = int.tryParse(_maxController.text);
       if (max != null && p.prix > max) return false;
 
-      // recherche par titre (insensible à la casse et aux espaces superflus)
       if (_texteRecherche.trim().isNotEmpty) {
         final texte = _texteRecherche.trim().toLowerCase();
         final titreCorrespond = p.nameArticle.toLowerCase().contains(texte);
@@ -88,7 +91,6 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const AppHeader(title: 'CampusMarket'),
             SearchBarWidget(
               enabled: true,
               controller: _rechercheController,
@@ -164,7 +166,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                                           ScaffoldMessenger.of(context).showSnackBar(
                                             SnackBar(
                                                 content:
-                                                    Text('Produit : ${produit.nameArticle}')),
+                                                    Text('Article : ${produit.nameArticle}')),
                                           );
                                         },
                                       );
@@ -336,7 +338,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
         children: const [
           Icon(Icons.inventory_2_outlined, size: 64, color: Colors.grey),
           SizedBox(height: 12),
-          Text('Aucun produit ne correspond à ces filtres', style: TextStyle(color: Colors.grey, fontSize: 16)),
+          Text('Aucun article ne correspond à ces filtres', style: TextStyle(color: Colors.grey, fontSize: 16)),
         ],
       ),
     );

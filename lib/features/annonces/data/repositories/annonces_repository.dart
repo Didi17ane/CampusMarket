@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../../auth/data/models/articles_models.dart';
-
+import '../models/articles_models.dart';
 class AnnoncesRepository {
   final CollectionReference _produitsRef =
       FirebaseFirestore.instance.collection('Articles');
@@ -19,6 +18,8 @@ class AnnoncesRepository {
           description: data['description'] ?? '',
           prix: data['prix'] ?? 0,
           categorieId: data['categorieId'] ?? '',
+          vendeurId: data['vendeurId'] ?? '',
+
         );
       }).toList();
     });
