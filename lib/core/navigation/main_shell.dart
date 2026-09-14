@@ -28,19 +28,19 @@ class MainShell extends ConsumerWidget {
   // 4 vrais onglets seulement (Publier est géré à part, voir onTap).
   static const screens = [
     CatalogueScreen(),
-    PublierAnnonceScreen(),
+
     MesAnnoncesScreen(),
     ProfilScreen(),
   ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final realIndex = ref.watch(currentTabIndexProvider); // 0..3
+    final realIndex = ref.watch(currentTabIndexProvider); // 0..2
 
     // La bottom bar affiche 5 icônes, mais "Publier" (position 2) ne
     // correspond à aucun onglet réel : on décale l'affichage pour que les
     // 4 vrais onglets s'allument correctement au bon endroit visuel.
-    final visualIndex = realIndex < 2 ? realIndex : realIndex + 1;
+    final visualIndex = realIndex < 1 ? realIndex : realIndex + 1;
 
     return Scaffold(
       body: screens[realIndex],
@@ -51,12 +51,12 @@ class MainShell extends ConsumerWidget {
         selectedFontSize: 11,
         unselectedFontSize: 11,
         onTap: (tapped) {
-          if (tapped == 2) {
+          if (tapped == 1) {
             // Publier : toujours un vrai push, jamais un changement d'onglet.
             context.push('/publier');
             return;
           }
-          final newRealIndex = tapped < 2 ? tapped : tapped - 1;
+          final newRealIndex = tapped < 1 ? tapped : tapped - 1;
           ref.read(currentTabIndexProvider.notifier).state = newRealIndex;
         },
         items: const [
