@@ -6,6 +6,7 @@ import '../widgets/coming_soon_screen.dart';
 import '../../features/auth/presentation/screens/profil_screen.dart';
 import '../../features/mes_annonces/presentation/screens/mes_annonces_screen.dart';
 import '../../features/annonces/presentation/screens/catalogue_screen.dart';
+import '../../features/annonces/presentation/screens/publier_annonce_screen.dart';
 
 /// Bottom nav principale de l'app, conforme à la maquette (5 icônes) :
 /// Catalogue, Rechercher, Publier, Mes annonces, Profil.
@@ -27,7 +28,7 @@ class MainShell extends ConsumerWidget {
   // 4 vrais onglets seulement (Publier est géré à part, voir onTap).
   static const screens = [
     CatalogueScreen(),
-    ComingSoonScreen(titre: 'Rechercher'),
+    PublierAnnonceScreen(),
     MesAnnoncesScreen(),
     ProfilScreen(),
   ];

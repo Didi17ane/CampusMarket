@@ -30,7 +30,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         return '/login';
       }
 
-      // 3. Si l'utilisateur est connecté et tente d'aller sur Login/Signup -> redirection Accueil
+      // 3. Si l'utilisateur est connecté et tente d'aller sur Login/Signu p -> redirection Accueil
       final bool isAuthRoute =
           currentLocation == '/login' || currentLocation == '/signup';
       if (isConnected && isAuthRoute) {
