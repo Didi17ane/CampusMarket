@@ -8,6 +8,9 @@ import 'package:campusmarket/features/articles_details/presentation/utils/launch
 import 'package:campusmarket/features/articles_details/presentation/widgets/image_carousel.dart';
 import 'package:campusmarket/features/articles_details/presentation/widgets/widget_tile.dart';
 import 'package:campusmarket/features/auth/data/models/users_models.dart';
+import 'package:campusmarket/features/auth/presentation/providers/user_provider.dart';
+import 'package:campusmarket/services/firestore_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -30,6 +33,7 @@ class ArticleDetailScreen extends ConsumerStatefulWidget {
 class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
   final TextEditingController commentController = TextEditingController();
   int ratingValue = 0;
+  final _firestoreService = FirestoreService();
 
   @override
   void dispose() {
@@ -42,6 +46,7 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
     final article = ref.watch(articleDetailProvider(widget.articleId));
     final comments = ref.watch(commentNotifierProvider(widget.articleId));
     final seller = ref.watch(userDetailProvider(widget.vendeurId));
+    final userCourant = ref.watch(currentUserProvider);
 
     // Calcul de la note moyenne (mis à jour à chaque rebuild)
     final commentsData = comments.asData?.value ?? [];
@@ -53,7 +58,7 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
         : notesWithValues.map((c) => c.note!).reduce((a, b) => a + b) /
               notesWithValues.length;
 
-    void addComment() {
+    void addComment(String userId) {
       final text = commentController.text.trim();
       if (text.isEmpty) return;
       ref
@@ -64,7 +69,7 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
               datePublication: DateTime.now(),
               produitId: widget.articleId,
               note: ratingValue,
-              auteurId: ' test-user-001 ', //user_courant
+              auteurId: userId, //user_courant
             ),
           );
       commentController.clear();
@@ -87,66 +92,76 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                   top: 16,
                   bottom: MediaQuery.of(context).viewInsets.bottom + 16,
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Donner votre avis",
-                      style: TextStyle(
-                        fontFamily: "Poppins",
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
+                child: userCourant.when(
+                  data: (userData) {
+                    Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: List.generate(5, (index) {
-                        return IconButton(
-                          onPressed: () {
-                            setModalState(() {
-                              ratingValue = index + 1;
-                            });
-                          },
-                          icon: Icon(
-                            index < ratingValue
-                                ? Icons.star
-                                : Icons.star_border,
-                            color: Colors.amber,
-                            size: 32,
-                          ),
-                        );
-                      }),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: TextField(
-                            controller: commentController,
-                            decoration: InputDecoration(
-                              hintText: "Ajouter un commentaire...",
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 10,
+                        const Text(
+                          "Donner votre avis",
+                          style: TextStyle(
+                            fontFamily: "Poppins",
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: List.generate(5, (index) {
+                            return IconButton(
+                              onPressed: () {
+                                setModalState(() {
+                                  ratingValue = index + 1;
+                                });
+                              },
+                              icon: Icon(
+                                index < ratingValue
+                                    ? Icons.star
+                                    : Icons.star_border,
+                                color: Colors.amber,
+                                size: 32,
                               ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
+                            );
+                          }),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: commentController,
+                                decoration: InputDecoration(
+                                  hintText: "Ajouter un commentaire...",
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 10,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.send),
-                          onPressed: () {
-                            addComment();
-                            Navigator.pop(context);
-                          },
+                            IconButton(
+                              icon: const Icon(Icons.send),
+                              onPressed: () {
+                                addComment(userData!.id);
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-                  ],
+                    );
+                  },
+                  error: (error, stackTrace) {
+                    return Text("Aucune données");
+                  },
+                  loading: () {
+                    return CircularProgressIndicator();
+                  },
                 ),
               );
             },
@@ -230,7 +245,7 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                                                 ),
                                               ),
                                               Image.asset(
-                                                "assets/icon/icon.png",
+                                                "assets/images/CampusMarket_logo_icone.png",
                                                 height: 40,
                                                 width: 40,
                                               ),
@@ -254,7 +269,7 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        data.prix.toString(), //price
+                                        "${data.prix.toString()} FCFA", //price
                                         style: TextStyle(
                                           fontFamily: "Inter",
                                           fontSize: 23,
@@ -273,20 +288,37 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                                       ),
                                     ],
                                   ),
-                                  Container(
-                                    padding: EdgeInsets.all(8.0),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.orangeFonce,
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: Text(
-                                      "Catégorie",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+
+                                  FutureBuilder(
+                                    future: _firestoreService
+                                        .getCategorieNomById(data.categorieId),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return Container(
+                                          padding: EdgeInsets.all(8.0),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.orangeFonce,
+                                            borderRadius: BorderRadius.circular(
+                                              30,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            snapshot.data.toString(),
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        );
+                                      } else if (snapshot.hasError) {
+                                        return SizedBox.shrink();
+                                      } else {
+                                        return Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+                                    },
                                   ),
                                   SizedBox(height: 10),
                                   const Text(
@@ -339,8 +371,7 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                                                   onPressed: () async {
                                                     try {
                                                       await ouvrirWhatsApp(
-                                                        sellerData
-                                                            .phoneNumber, // ⭐ le numéro du vendeur récupéré via le provider
+                                                        sellerData.phoneNumber,
                                                         message:
                                                             'Bonjour, je suis intéressé par ${data.nameArticle}!',
                                                       );
