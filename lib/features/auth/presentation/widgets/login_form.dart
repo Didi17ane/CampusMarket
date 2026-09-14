@@ -1,4 +1,5 @@
-import 'package:campusmarket/features/auth/domain/usecases/signin_user.dart';
+import 'package:campusmarket/core/constants/theme_contants.dart';
+import 'package:campusmarket/features/auth/domain/usecases/loginin_user.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,6 +22,14 @@ class _LoginFormState extends State<LoginForm> {
   final _passwordUserController = TextEditingController();
 
   bool _isObscured = true;
+
+  bool _isLoading = false;
+
+  void setLoading() {
+    setState(() {
+      _isLoading = true;
+    });
+  }
 
   void setIsObscured() {
     setState(() {
@@ -105,26 +114,41 @@ class _LoginFormState extends State<LoginForm> {
               ),
               SizedBox(height: 30),
               GestureDetector(
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: primaryColor,
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Se connecter',
-                      style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                child: !_isLoading
+                    ? Container(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: primaryColor,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Se connecter',
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: AppColors.grisClair,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.grisTexte,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
                 onTap: () async {
+                  setLoading();
                   try {
-                    await SignIn(
+                    await LogIn(
                       _emailUserController.text.trim(),
                       _passwordUserController.text.trim(),
                     );
@@ -145,6 +169,12 @@ class _LoginFormState extends State<LoginForm> {
                       duration: const Duration(seconds: 3),
                       animationDuration: const Duration(milliseconds: 500),
                     );
+                  } finally {
+                    if (mounted) {
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    }
                   }
                 },
               ),
@@ -155,7 +185,7 @@ class _LoginFormState extends State<LoginForm> {
                   'Pas de compte ? Créer un compte',
                   style: GoogleFonts.poppins(color: primaryColor),
                 ),
-                onTap: () => context.go('/signin'),
+                onTap: () => context.go('/signup'),
               ),
             ],
           ),
