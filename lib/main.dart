@@ -12,12 +12,10 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await dotenv.load(fileName: ".env");
 
-  runApp(
-    ProviderScope(
-      overrides: [currentUserIdProvider.overrideWithValue(kTestUserId)],
-      child: const CampusMarketApp(),
-    ),
-  );
+  // Plus d'utilisateur de test : l'app utilise maintenant le vrai
+  // utilisateur connecté via Firebase Auth (routerProvider gère aussi
+  // les redirections /login selon l'état de connexion réel).
+  runApp(const ProviderScope(child: CampusMarketApp()));
 }
 
 class CampusMarketApp extends ConsumerWidget {
