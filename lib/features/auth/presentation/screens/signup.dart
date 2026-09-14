@@ -22,7 +22,7 @@ class SignUp extends StatelessWidget {
                 child: Column(
                   children: [
                     Image.asset(
-                      'assets/images/Logo_Campus_market.png',
+                      'assets/images/CampusMarket_logo_icone.png',
                       width: 100,
                       height: 100,
                     ),
@@ -34,7 +34,7 @@ class SignUp extends StatelessWidget {
                             text: "Campus",
                             style: GoogleFonts.poppins(
                               fontSize: 30,
-                              fontWeight: FontWeight.bold
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                           TextSpan(
@@ -42,19 +42,18 @@ class SignUp extends StatelessWidget {
                             style: GoogleFonts.poppins(
                               color: AppColors.orangePrincipal,
                               fontSize: 30,
-                              fontWeight: FontWeight.bold
-                            )
-                          )
-                        ]
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Text("Achat, vente et echange d'objet de seconde main",
-                      style: GoogleFonts.poppins(
-                        color: Colors.white
-                      ),
+                    Text(
+                      "Achat, vente et echange d'objet de seconde main",
+                      style: GoogleFonts.poppins(color: Colors.white),
                     ),
                     SizedBox(height: 20),
-                    SignupForm()
+                    SignupForm(),
                   ],
                 ),
               ),
