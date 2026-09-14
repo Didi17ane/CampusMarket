@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import '../../../../services/firestore_service.dart';
@@ -6,8 +7,8 @@ import '../../data/models/articles_models.dart';
 
 // Simulation d'un user temporaire
 final authUserIdProvider = Provider<String?>((ref) {
-  // return FirebaseAuth.instance.currentUser?.uid;
-  return "vendeur_etudiant_id_999";
+  return FirebaseAuth.instance.currentUser?.uid;
+  //return "vendeur_etudiant_id_999";
 });
 
 // Définition des états de publication
@@ -47,22 +48,20 @@ class PublishNotifier extends StateNotifier<PublishState> {
     state = PublishState(isLoading: true);
 
     try {
-      String urlPhoto = 'url_par_defaut.jpg';
-
       // GESTION DE l'IMAGE SUR FIRESTORAGE
 
-      // 1. Téléversement de l'image principale
-      urlPhoto = await _firestoreService.uploadArticleImage(
+      // Téléversement de l'image principale
+      final urlPhoto = await _firestoreService.uploadArticleImage(
         imageFile,
         _currentUserId,
       );
 
-      // 2. Téléversement des images secondaires en parallèle
+      // Téléversement des images secondaires en parallèle
       List<String> urlsSecondaires = [];
       for (File file in imagesSecondaires) {
         String url = await _firestoreService.uploadArticleImage(
           file,
-          _currentUserId!,
+          _currentUserId,
         );
         urlsSecondaires.add(url);
       }

@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import './core/constants/theme_contants.dart';
 import 'firebase_options.dart';
 import './routes/routes.dart';
 
@@ -48,6 +49,7 @@ class CampusMarketApp extends ConsumerWidget {
             fontSize: 20,
             color: Colors.white,
           ),
+          iconTheme: IconThemeData(color: AppColors.blanc),
         ),
       ),
       routerConfig: router,
