@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/providers/navigation_provider.dart';
 import '../providers/user_provider.dart';
 import 'modifier_profil_screen.dart';
-import '../../../../core/providers/navigation_provider.dart';
 import '../../../../core/widgets/app_drawer.dart';
 
 class ProfilScreen extends ConsumerWidget {
@@ -35,7 +36,11 @@ class ProfilScreen extends ConsumerWidget {
                 title: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Image.asset('assets/icon/icon.png', width: 24, height: 24),
+                    Image.asset(
+                      'assets/images/CampusMarket_logo_icone.png',
+                      width: 24,
+                      height: 24,
+                    ),
                     const SizedBox(width: 8),
                     const Text(
                       'Mon profil',
@@ -97,16 +102,6 @@ class ProfilScreen extends ConsumerWidget {
                       },
                     ),
                     _ProfilTile(
-                      label: 'Mes produits / annonces',
-                      onTap: () {
-                        ref.read(currentTabIndexProvider.notifier).state = 2;
-                      },
-                    ),
-                    _ProfilTile(
-                      label: 'Mes favoris',
-                      onTap: () => _bientotDisponible(context),
-                    ),
-                    _ProfilTile(
                       label: 'Paramètres de notification',
                       onTap: () => _bientotDisponible(context),
                     ),
@@ -130,6 +125,16 @@ class ProfilScreen extends ConsumerWidget {
                           ),
                           onPressed: () async {
                             await FirebaseAuth.instance.signOut();
+                            ref.read(currentTabIndexProvider.notifier).state =
+                                0;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Vous êtes déconnecté(e)'),
+                              ),
+                            );
+                            if (context.mounted) {
+                              context.go('/');
+                            }
                           },
                           child: const Text('Se déconnecter'),
                         ),

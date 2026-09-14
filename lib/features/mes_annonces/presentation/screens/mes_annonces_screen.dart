@@ -31,7 +31,11 @@ class MesAnnoncesScreen extends ConsumerWidget {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset('assets/icon/icon.png', width: 24, height: 24),
+            Image.asset(
+              'assets/images/CampusMarket_logo_icone.png',
+              width: 24,
+              height: 24,
+            ),
             const SizedBox(width: 8),
             annoncesAsync.when(
               data: (annonces) => Text(
@@ -49,7 +53,9 @@ class MesAnnoncesScreen extends ConsumerWidget {
         error: (err, _) => Center(child: Text('Erreur : $err')),
         data: (annonces) {
           if (annonces.isEmpty) {
-            return const Center(child: Text('Aucune annonce publiée pour le moment.'));
+            return const Center(
+              child: Text('Aucune annonce publiée pour le moment.'),
+            );
           }
           return ListView.builder(
             padding: const EdgeInsets.symmetric(vertical: 12),
@@ -80,7 +86,11 @@ class MesAnnoncesScreen extends ConsumerWidget {
     );
   }
 
-  void _confirmerSuppression(BuildContext context, WidgetRef ref, String articleId) {
+  void _confirmerSuppression(
+    BuildContext context,
+    WidgetRef ref,
+    String articleId,
+  ) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
