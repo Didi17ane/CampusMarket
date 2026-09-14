@@ -26,6 +26,8 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: backgroundColor ?? AppColors.noir,
       elevation: 0,
 
+      iconTheme: const IconThemeData(color: AppColors.blanc),
+      
       // Widget a gauche si fournir remplace le bouton retour
       leading: leftWidget,
       automaticallyImplyLeading: leftWidget == null,
