@@ -14,7 +14,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   final authNotifier = ref.watch(routerAuthNotifierProvider);
 
   return GoRouter(
-    initialLocation: '/', 
+    initialLocation: '/',
     refreshListenable: authNotifier,
     redirect: (BuildContext context, GoRouterState state) {
       final bool isConnected = authNotifier.isConnected;
