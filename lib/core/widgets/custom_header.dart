@@ -5,6 +5,8 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
   final String? title; // le titre de la page 'oprionnel'
   final bool
   showLogo; // bool pour afficher le logo à coté du titre 'est à false par defaut'
+  final bool
+  showMenuButton; // affiche un bouton menu (☰) qui ouvre automatiquement le Drawer de l'écran
   final List<Widget>?
   rightAction; // Pour ajouter des element a droite s'il y en a (esx: menu, profile avatar, ...)
   final Widget? leftWidget; // Pour ajouter des element à gauche
@@ -14,7 +16,8 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     this.title,
     this.showLogo = false,
-    this.centerTitle = true,
+    this.showMenuButton = false,
+    this.centerTitle = false,
     this.rightAction,
     this.leftWidget,
     this.backgroundColor,
@@ -52,7 +55,19 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
-      actions: rightAction,
+
+      // showMenuButton ajoute automatiquement le bouton ☰ qui ouvre le Drawer.
+      // On garde aussi rightAction pour les autres icônes (favoris, recherche, etc.)
+      actions: [
+        if (showMenuButton)
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.menu, color: AppColors.blanc),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
+          ),
+        if (rightAction != null) ...rightAction!,
+      ],
 
       centerTitle: centerTitle,
     );

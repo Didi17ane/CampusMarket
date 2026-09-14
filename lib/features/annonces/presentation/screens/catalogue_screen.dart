@@ -7,6 +7,8 @@ import '../widgets/product_card.dart';
 import '../../../../core/widgets/custom_header.dart';
 import '../../../../core/widgets/search_bar_widget.dart';
 
+import '../../../../core/widgets/app_drawer.dart';
+
 class CatalogueScreen extends StatefulWidget {
   const CatalogueScreen({super.key});
 
@@ -88,12 +90,23 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+      Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomHeader(
-        title: 'CampusMarket',
-        showLogo: true,
-      ),
+      appBar: CustomHeader(
+          title: 'CampusMarket',
+          showLogo: true,
+          rightAction: [
+            Builder(
+              builder: (context) => IconButton(
+                icon: const Icon(Icons.menu, color: Colors.white),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              ),
+            ),
+          ],
+        ),
+      drawer: AppDrawer(),
       backgroundColor: const Color(0xFFF0F0F2),
       body: SafeArea(
         child: Column(
