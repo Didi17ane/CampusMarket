@@ -24,10 +24,10 @@ final articleDetailRepositoryProvider = Provider<ArticleDetailRepository>((
 
 //Providers consommés par les écrans
 
-final articleDetailProvider = FutureProvider.family<ArticlesModels, String>((
+final articleDetailProvider = StreamProvider.family<ArticlesModels, String>((
   ref,
   articleId,
-) async {
+) {
   final repository = ref.watch(articleDetailRepositoryProvider);
-  return repository.getArticleById(articleId);
+  return repository.watchArticleById(articleId);
 });

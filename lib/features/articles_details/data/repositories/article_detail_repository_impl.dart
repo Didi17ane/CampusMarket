@@ -16,4 +16,9 @@ class ArticleDetailRepositoryImpl implements ArticleDetailRepository {
       throw Exception(e.message.toString());
     }
   }
+
+  @override
+  Stream<ArticlesModels> watchArticleById(String articleId) {
+    return remoteArticleDetailDataSource.watchArticleById(articleId);
+  }
 }

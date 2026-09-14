@@ -1,7 +1,8 @@
+import 'package:campusmarket/features/annonces/data/models/articles_models.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../data/repositories/annonces_repository.dart';
 import '../../data/repositories/categories_repository.dart';
-import '../../../auth/data/models/articles_models.dart';
 import '../../../annonces/data/models/categories_models.dart';
 import '../widgets/product_card.dart';
 import '../../../../core/widgets/app_header.dart';
@@ -95,10 +96,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            AppHeader(
-              title: 'CampusMarket',
-              showMenuButton: true,
-            ),
+            AppHeader(title: 'CampusMarket', showMenuButton: true),
             SearchBarWidget(
               enabled: true,
               controller: _rechercheController,
@@ -178,18 +176,22 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                                         ),
                                     itemCount: produitsAffiches.length,
                                     itemBuilder: (context, index) {
-                                      final produit = produitsAffiches[index];
+                                      ArticlesModels produit =
+                                          produitsAffiches[index];
                                       return ProductCard(
                                         produit: produit,
                                         onTap: () {
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                'Produit : ${produit.nameArticle}',
-                                              ),
-                                            ),
+                                          // ScaffoldMessenger.of(
+                                          //   context,
+                                          // ).showSnackBar(
+                                          //   SnackBar(
+                                          //     content: Text(
+                                          //       'Produit : ${produit.nameArticle}',
+                                          //     ),
+                                          //   ),
+                                          // );
+                                          context.push(
+                                            '/article/${produit.id}/${produit.vendeurId}',
                                           );
                                         },
                                       );

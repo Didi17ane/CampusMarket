@@ -94,7 +94,18 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                 ),
                 child: userCourant.when(
                   data: (userData) {
-                    Column(
+                    if (userData == null) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 24.0),
+                        child: Center(
+                          child: Text(
+                            "Veuillez vous connecter pour laisser un avis.",
+                            style: TextStyle(fontFamily: "Poppins"),
+                          ),
+                        ),
+                      );
+                    }
+                    return Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -147,7 +158,7 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                             IconButton(
                               icon: const Icon(Icons.send),
                               onPressed: () {
-                                addComment(userData!.id);
+                                addComment(userData.id);
                                 Navigator.pop(context);
                               },
                             ),
@@ -157,10 +168,20 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                     );
                   },
                   error: (error, stackTrace) {
-                    return Text("Aucune données");
+                    return const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Text("Erreur de chargement du profil"),
+                      ),
+                    );
                   },
                   loading: () {
-                    return CircularProgressIndicator();
+                    return const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(24.0),
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
                   },
                 ),
               );
@@ -195,7 +216,10 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                                 data.photo,
                                 ...data.imagesDetails,
                               ];
-
+                              print(
+                                "produit: ${article.asData?.value.imagesDetails}",
+                              );
+                              print("allImages: ${data.imagesDetails}");
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -277,15 +301,15 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                                           color: AppColors.orangeFonce,
                                         ),
                                       ),
-                                      Text(
-                                        data.statut, //statut
-                                        style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.green,
-                                        ),
-                                      ),
+                                      // Text(
+                                      //   data.statut, //statut
+                                      //   style: TextStyle(
+                                      //     fontFamily: "Inter",
+                                      //     fontSize: 15,
+                                      //     fontWeight: FontWeight.bold,
+                                      //     color: Colors.green,
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
 
@@ -345,6 +369,11 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                                   // --- Section commentaires ---
                                   seller.when(
                                     data: (Users? sellerData) {
+                                      final currentUserId =
+                                          userCourant.asData?.value?.id;
+                                      final isSeller =
+                                          currentUserId != null &&
+                                          currentUserId == widget.vendeurId;
                                       return SizedBox(
                                         child: Column(
                                           crossAxisAlignment:
@@ -355,49 +384,58 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                                               userSeller: true,
                                               noteMoyenne: noteMoyenne,
                                             ),
-                                            Center(
-                                              child: SizedBox(
-                                                child: ElevatedButton(
-                                                  style: ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        const Color(0xFF25D366),
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            30,
+                                            if (!isSeller)
+                                              Center(
+                                                child: SizedBox(
+                                                  child: ElevatedButton(
+                                                    style: ElevatedButton.styleFrom(
+                                                      backgroundColor:
+                                                          const Color(
+                                                            0xFF25D366,
                                                           ),
-                                                    ),
-                                                  ),
-                                                  onPressed: () async {
-                                                    try {
-                                                      await ouvrirWhatsApp(
-                                                        sellerData.phoneNumber,
-                                                        message:
-                                                            'Bonjour, je suis intéressé par ${data.nameArticle}!',
-                                                      );
-                                                    } catch (e) {
-                                                      if (context.mounted) {
-                                                        ScaffoldMessenger.of(
-                                                          context,
-                                                        ).showSnackBar(
-                                                          SnackBar(
-                                                            content: Text(
-                                                              'Impossible d\'ouvrir WhatsApp',
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              30,
                                                             ),
-                                                          ),
+                                                      ),
+                                                    ),
+                                                    onPressed: () async {
+                                                      try {
+                                                        await ouvrirWhatsApp(
+                                                          sellerData
+                                                              .phoneNumber,
+                                                          message:
+                                                              'Bonjour, je suis intéressé par ${data.nameArticle}!',
                                                         );
+                                                      } catch (e) {
+                                                        if (context.mounted) {
+                                                          ScaffoldMessenger.of(
+                                                            context,
+                                                          ).showSnackBar(
+                                                            SnackBar(
+                                                              content: Text(
+                                                                e
+                                                                    .toString()
+                                                                    .replaceFirst(
+                                                                      'Exception: ',
+                                                                      '',
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        }
                                                       }
-                                                    }
-                                                  },
-                                                  child: Text(
-                                                    "Contacter le vendeur(WhatsApp)",
-                                                    style: TextStyle(
-                                                      color: Colors.white,
+                                                    },
+                                                    child: const Text(
+                                                      "Contacter le vendeur(WhatsApp)",
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
                                           ],
                                         ),
                                       );
@@ -409,17 +447,34 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                                           );
                                         },
                                     loading: () {
-                                      return CircularProgressIndicator();
+                                      return const CircularProgressIndicator();
                                     },
                                   ),
                                   const Divider(height: 20, thickness: 1),
-                                  Center(
-                                    child: TextButton(
-                                      onPressed: () {
-                                        buttonSheet();
-                                      },
-                                      child: Text("Donner votre avis"),
-                                    ),
+                                  userCourant.when(
+                                    data: (userData) {
+                                      if (userData == null)
+                                        return const SizedBox.shrink();
+                                      final isSeller =
+                                          userData.id == widget.vendeurId;
+                                      if (isSeller)
+                                        return const SizedBox.shrink();
+                                      final dejaCommente = commentsData.any(
+                                        (c) => c.auteurId == userData.id,
+                                      );
+                                      if (dejaCommente)
+                                        return const SizedBox.shrink();
+                                      return Center(
+                                        child: TextButton(
+                                          onPressed: () => buttonSheet(),
+                                          child: const Text(
+                                            "Donner votre avis",
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    error: (_, __) => const SizedBox.shrink(),
+                                    loading: () => const SizedBox.shrink(),
                                   ),
 
                                   comments.when(
@@ -481,7 +536,12 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                               );
                             },
                             loading: () {
-                              return CircularProgressIndicator();
+                              return SizedBox(
+                                height: MediaQuery.of(context).size.height,
+                                child: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
                             },
                           ),
                         ),

@@ -62,17 +62,25 @@ class MesAnnoncesScreen extends ConsumerWidget {
             itemCount: annonces.length,
             itemBuilder: (context, index) {
               final annonce = annonces[index];
-              return AnnonceCard(
-                annonce: annonce,
-                onEdit: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => ModifierAnnonceScreen(annonce: annonce),
-                    ),
+              return InkWell(
+                onTap: () {
+                  context.push(
+                    '/article/${annonces[index].id}/${annonces[index].vendeurId}',
                   );
                 },
-                onDelete: () => _confirmerSuppression(context, ref, annonce.id),
+                child: AnnonceCard(
+                  annonce: annonce,
+                  onEdit: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ModifierAnnonceScreen(annonce: annonce),
+                      ),
+                    );
+                  },
+                  onDelete: () =>
+                      _confirmerSuppression(context, ref, annonce.id),
+                ),
               );
             },
           );

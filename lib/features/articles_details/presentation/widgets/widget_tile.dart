@@ -71,32 +71,35 @@ class WidgetTile extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
 
-                    if (userSeller && noteMoyenne != null) ...[
+                    if (userSeller) ...[
                       Row(
                         children: [
                           ...List.generate(5, (index) {
+                            final isFilled =
+                                noteMoyenne != null &&
+                                index < noteMoyenne!.round();
                             return Icon(
-                              index < noteMoyenne!.round()
-                                  ? Icons.star
-                                  : Icons.star_border,
+                              isFilled ? Icons.star : Icons.star_border,
                               size: 15,
-                              color: index < noteMoyenne!.round()
+                              color: isFilled
                                   ? AppColors.orangePrincipal
                                   : Colors.grey,
                             );
                           }),
-                          const SizedBox(width: 4),
-                          Text(
-                            noteMoyenne!.toStringAsFixed(1),
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.orangePrincipal,
+                          if (noteMoyenne != null) ...[
+                            const SizedBox(width: 4),
+                            Text(
+                              noteMoyenne!.toStringAsFixed(1),
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.orangePrincipal,
+                              ),
                             ),
-                          ),
+                          ],
                         ],
                       ),
-                    ] else if (!userSeller) ...[
+                    ] else ...[
                       Row(
                         children: List.generate(5, (index) {
                           final starCount = comment?.note ?? 0;

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class RemoteArticleDetailDataSource {
   Future<ArticlesModels> getArticleById(String articleId);
+  Stream<ArticlesModels> watchArticleById(String articleId);
 }
 
 class RemoteArticleDetailDataSourceImpl
@@ -21,7 +22,27 @@ class RemoteArticleDetailDataSourceImpl
     if (!doc.exists) {
       throw Exception('Article introuvable');
     }
-    return ArticlesModels.fromJson(doc.data() as Map<String, dynamic>);
+    return ArticlesModels.fromJson(
+      doc.data() as Map<String, dynamic>,
+      id: doc.id,
+    );
+  }
+
+  @override
+  Stream<ArticlesModels> watchArticleById(String articleId) {
+    return firestore
+        .collection(kArticlesCollection)
+        .doc(articleId)
+        .snapshots()
+        .map((doc) {
+          if (!doc.exists || doc.data() == null) {
+            throw Exception('Article introuvable');
+          }
+          return ArticlesModels.fromJson(
+            doc.data() as Map<String, dynamic>,
+            id: doc.id,
+          );
+        });
   }
 
   Future<void> addComment(
