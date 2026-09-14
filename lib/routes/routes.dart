@@ -45,7 +45,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       // Authentification
       GoRoute(path: '/login', builder: (context, state) => const Login()),
-      GoRoute(path: '/signup', builder: (context, state) => const SignIn()),
+      GoRoute(path: '/signup', builder: (context, state) => const SignUp()),
       GoRoute(
         path: '/profil',
         builder: (context, state) => const ProfilScreen(),

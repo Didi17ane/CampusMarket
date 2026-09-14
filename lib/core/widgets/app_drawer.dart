@@ -131,7 +131,7 @@ class AppDrawer extends ConsumerWidget {
             label: 'Se déconnecter',
             color: Colors.red,
             onTap: () async {
-              Navigator.pop(context);
+              // Navigator.pop(context);
               await FirebaseAuth.instance.signOut();
             },
           ),
