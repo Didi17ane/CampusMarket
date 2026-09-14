@@ -4,13 +4,17 @@ class ArticlesModels {
   String nameArticle;
   String description;
   int prix;
-  String vendeurId;    // Lien vers Users.id : indispensable pour "Mes annonces" (T-09) et le contact vendeur (T-06)
-  String categorieId;  // Lien vers CategoriesModels.id : utilisé par les filtres (T-03) et la recherche (T-10)
-  String statut;        // 'active' ou 'vendue' : utilisé par l'écran "Mes annonces" (T-09)
-
+  String
+  vendeurId; // Lien vers Users.id : indispensable pour "Mes annonces" (T-09) et le contact vendeur (T-06)
+  String
+  categorieId; // Lien vers CategoriesModels.id : utilisé par les filtres (T-03) et la recherche (T-10)
+  String
+  statut; // 'active' ou 'vendue' : utilisé par l'écran "Mes annonces" (T-09)
+  List<String> imagesDetails = [];
   ArticlesModels({
     this.id = '',
     required this.photo,
+    this.imagesDetails = const[],
     required this.nameArticle,
     required this.description,
     required this.prix,
@@ -20,7 +24,6 @@ class ArticlesModels {
   });
 
   Map<String, dynamic> toJson() => {
-    'id': id,
     'photo': photo,
     'nameArticle': nameArticle,
     'description': description,
@@ -30,15 +33,17 @@ class ArticlesModels {
     'statut': statut,
   };
 
-  factory ArticlesModels.fromJson(Map<String, dynamic> json, {String id = ''}) =>
-      ArticlesModels(
-        id: id.isNotEmpty ? id : (json['id'] ?? ''),
-        photo: json['photo'] ?? '',
-        nameArticle: json['nameArticle'] ?? '',
-        description: json['description'] ?? '',
-        prix: json['prix'] ?? 0,
-        vendeurId: json['vendeurId'] ?? '',
-        categorieId: json['categorieId'] ?? '',
-        statut: json['statut'] ?? 'active',
-      );
+  factory ArticlesModels.fromJson(
+    Map<String, dynamic> json, {
+    String id = '',
+  }) => ArticlesModels(
+    id: id.isNotEmpty ? id : (json['id'] ?? ''),
+    photo: json['photo'] ?? '',
+    nameArticle: json['nameArticle'] ?? '',
+    description: json['description'] ?? '',
+    prix: json['prix'] ?? 0,
+    vendeurId: json['vendeurId'] ?? '',
+    categorieId: json['categorieId'] ?? '',
+    statut: json['statut'] ?? 'active',
+  );
 }
