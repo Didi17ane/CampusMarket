@@ -3,7 +3,6 @@ import '../core/navigation/main_shell.dart';
 import 'package:go_router/go_router.dart';
 import '../features/auth/presentation/screens/login.dart';
 import '../features/auth/presentation/screens/signup.dart';
-import '../features/auth/presentation/screens/testconnect.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/auth/presentation/providers/route_auth_provider.dart';
 import '../features/auth/presentation/screens/profil_screen.dart';
@@ -14,34 +13,44 @@ final routerProvider = Provider<GoRouter>((ref) {
   final authNotifier = ref.watch(routerAuthNotifierProvider);
 
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: '/', // L'application démarre bien sur l'accueil
     refreshListenable: authNotifier,
     redirect: (BuildContext context, GoRouterState state) {
       final bool isConnected = authNotifier.isConnected;
-      final bool logginPage =
-          state.matchedLocation == '/login' ||
-          state.matchedLocation == '/signup';
+      final String currentLocation = state.matchedLocation;
 
-      if (!isConnected && !logginPage) {
+      // Liste des pages privées qui nécessitent obligatoirement d'être connecté
+      final bool isPrivateRoute =
+          currentLocation == '/profil' ||
+          currentLocation == '/publier' ||
+          currentLocation == '/mes-annonces';
+
+      // Si l'utilisateur n'est pas connecté et tente d'aller sur une page privée -> redirection Login
+      if (!isConnected && isPrivateRoute) {
         return '/login';
       }
 
-      if (isConnected && logginPage) {
-        return '/home';
+      // 3. Si l'utilisateur est connecté et tente d'aller sur Login/Signu p -> redirection Accueil
+      final bool isAuthRoute =
+          currentLocation == '/login' || currentLocation == '/signup';
+      if (isConnected && isAuthRoute) {
+        return '/';
       }
 
-      return null;
+      return null; // Pas de redirection pour le reste (ex: l'accueil '/')
     },
     routes: [
-      GoRoute(path: '/', builder: (context, state) => TestConnect()),
-      GoRoute(path: '/login', builder: (context, state) => const Login()),
+      // L'accueil principale accessible par tout le monde
+      GoRoute(path: '/', builder: (context, state) => const MainShell()),
 
-      GoRoute(path: '/signup', builder: (context, state) => const SignIn()),
-      GoRoute(path: '/home', builder: (context, state) => const MainShell()),
+      // Authentification
+      GoRoute(path: '/login', builder: (context, state) => const Login()),
+      GoRoute(path: '/signup', builder: (context, state) => const SignUp()),
       GoRoute(
         path: '/profil',
         builder: (context, state) => const ProfilScreen(),
       ),
+
       GoRoute(
         path: '/mes-annonces',
         builder: (context, state) => const MesAnnoncesScreen(),

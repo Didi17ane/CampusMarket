@@ -1,3 +1,4 @@
+import 'package:campusmarket/core/constants/theme_contants.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,17 +8,18 @@ import '../../data/models/users_models.dart';
 import '../../domain/usecases/signup_user.dart';
 import '../../../../core/constants/colors.dart';
 
-class SigninForm extends StatefulWidget {
-  const SigninForm({super.key});
+class SignupForm extends StatefulWidget {
+  const SignupForm({super.key});
 
   @override
-  State<SigninForm> createState() => _SigninFormState();
+  State<SignupForm> createState() => _SignupFormState();
 }
 
-class _SigninFormState extends State<SigninForm> {
+class _SignupFormState extends State<SignupForm> {
   final _formKey = GlobalKey<FormState>();
 
   bool _isObscured = true;
+  bool _isLoading = false;
 
   final _nameUserController = TextEditingController();
   final _lastNameUserController = TextEditingController();
@@ -29,6 +31,10 @@ class _SigninFormState extends State<SigninForm> {
     setState(() {
       _isObscured = !_isObscured;
     });
+  }
+
+  void setIsLoading() {
+    setState(() => _isLoading = true);
   }
 
   @override
@@ -160,25 +166,40 @@ class _SigninFormState extends State<SigninForm> {
             ),
             SizedBox(height: 30),
             GestureDetector(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.8,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: primaryColor,
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Center(
-                  child: Text(
-                    "S'inscrire",
-                    style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+              child: !_isLoading
+                  ? Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: AppColors.orangePrincipal,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "S'inscrire",
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: AppColors.grisClair,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.grisTexte,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
               onTap: () async {
                 if (_formKey.currentState!.validate()) {
+                  setIsLoading();
                   try {
                     await signUpUser(
                       utilisateurs: Users(
@@ -195,11 +216,23 @@ class _SigninFormState extends State<SigninForm> {
                       context: context,
                       type: SnackType.error,
                       position: SnackPosition.top,
-                      title: Text(' Oops', style: GoogleFonts.poppins(color: Colors.white),),
-                      subtitle: Text(message, style: GoogleFonts.poppins(color: Colors.white)),
+                      title: Text(
+                        ' Oops',
+                        style: GoogleFonts.poppins(color: Colors.white),
+                      ),
+                      subtitle: Text(
+                        message,
+                        style: GoogleFonts.poppins(color: Colors.white),
+                      ),
                       duration: const Duration(seconds: 3),
-                      animationDuration: const Duration(milliseconds: 500)
+                      animationDuration: const Duration(milliseconds: 500),
                     );
+                  } finally {
+                    if (mounted) {
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    }
                   }
                 }
               },
@@ -208,7 +241,7 @@ class _SigninFormState extends State<SigninForm> {
             GestureDetector(
               child: Text(
                 'Vous avez deja un compte ? Se connecter',
-                style: GoogleFonts.poppins(color: primaryColor),
+                style: GoogleFonts.poppins(color: AppColors.orangePrincipal),
               ),
               onTap: () => context.go('/login'),
             ),
