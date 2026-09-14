@@ -1,24 +1,23 @@
 import 'package:campusmarket/core/constants/theme_contants.dart';
-import 'package:campusmarket/features/auth/presentation/widgets/login_form.dart';
+import 'package:campusmarket/features/auth/presentation/widgets/signup_form.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:keyboard_safe/keyboard_safe.dart';
 
-class Login extends StatelessWidget {
-  const Login({super.key});
+class SignUp extends StatelessWidget {
+  const SignUp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: SafeArea(
-          child: SingleChildScrollView(
+        body: KeyboardSafe(
+          scroll: true,
+          child: SafeArea(
             child: Container(
               color: Colors.black,
-              padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.1,
-              ),
+              padding: EdgeInsets.only(top: 20),
               child: Center(
                 child: Column(
                   children: [
@@ -27,7 +26,7 @@ class Login extends StatelessWidget {
                       width: 100,
                       height: 100,
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
                     RichText(
                       text: TextSpan(
                         children: [
@@ -52,10 +51,9 @@ class Login extends StatelessWidget {
                     Text(
                       "Achat, vente et echange d'objet de seconde main",
                       style: GoogleFonts.poppins(color: Colors.white),
-                      textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 20),
-                    LoginForm(),
+                    SignupForm(),
                   ],
                 ),
               ),

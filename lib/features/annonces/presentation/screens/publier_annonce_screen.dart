@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../presentation/providers/published_provider.dart';
+import '../../../../core/widgets/custom_header.dart';
 
 class PublierAnnonceScreen extends ConsumerStatefulWidget {
   const PublierAnnonceScreen({super.key});
@@ -175,32 +176,10 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
     final publishState = ref.watch(publishProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.blanc),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-
-        title: Row(
-          children: [
-            const Icon(
-              Icons.directions_run,
-              color: AppColors.orangePrincipal,
-              size: 24,
-            ),
-            const SizedBox(width: 8),
-            const Text(
-              'Publier une annonce',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.bold,
-                color: AppColors.blanc,
-              ),
-            ),
-          ],
-        ),
+      appBar: CustomHeader(
+        title: 'Publier une annonce',
+        showLogo: true,
         centerTitle: false,
-        backgroundColor: AppColors.noir,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -348,7 +327,6 @@ class _PublierAnnonceScreenState extends ConsumerState<PublierAnnonceScreen> {
                   ),
               ],
               const SizedBox(height: 24),
-              // ... Avant le CustomTextField du Titre de l'annonce ...
 
               // Champ : Titre de l'annonce
               CustomTextField(

@@ -3,14 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import './routes/routes.dart';
+import './core/constants/theme_contants.dart';
 import 'firebase_options.dart';
-import 'core/providers/auth_providers.dart';
-
-// ⚠️ ID UTILISATEUR DE TEST — uniquement pour visualiser Profil/Mes annonces
-// avant que T-01 (Auth) soit terminé. À retirer dès que la vraie connexion
-// existe : il suffira de supprimer ce override.
-const String kTestUserId = 'vendeur_etudiant_id_999';
+import './routes/routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,11 +20,13 @@ void main() async {
   );
 }
 
-class CampusMarketApp extends StatelessWidget {
+class CampusMarketApp extends ConsumerWidget {
   const CampusMarketApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+
     return MaterialApp.router(
       title: 'CampusMarket',
       debugShowCheckedModeBanner: false,
@@ -54,6 +51,7 @@ class CampusMarketApp extends StatelessWidget {
             fontSize: 20,
             color: Colors.white,
           ),
+          iconTheme: IconThemeData(color: AppColors.blanc),
         ),
       ),
       routerConfig: router,
