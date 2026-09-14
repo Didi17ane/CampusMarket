@@ -3,26 +3,18 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import './routes/routes.dart';
 import 'firebase_options.dart';
-import 'core/providers/auth_providers.dart';
-
-// ID UTILISATEUR DE TEST — uniquement pour visualiser Profil/Mes annonces
-// avant que T-01 (Auth) soit terminé. À retirer dès que la vraie connexion
-// existe : il suffira de supprimer ce override.
-const String kTestUserId = 'vendeur_etudiant_id_999';
+import './routes/routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await dotenv.load(fileName: ".env");
 
-  runApp(
-    ProviderScope(
-      overrides: [currentUserIdProvider.overrideWithValue(kTestUserId)],
-      child: const CampusMarketApp(),
-    ),
-  );
+  // Plus d'utilisateur de test : l'app utilise maintenant le vrai
+  // utilisateur connecté via Firebase Auth (routerProvider gère aussi
+  // les redirections /login selon l'état de connexion réel).
+  runApp(const ProviderScope(child: CampusMarketApp()));
 }
 
 class CampusMarketApp extends ConsumerWidget {
@@ -30,7 +22,8 @@ class CampusMarketApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final goRouter = ref.watch(routerProvider);
+    final router = ref.watch(routerProvider);
+
     return MaterialApp.router(
       title: 'CampusMarket',
       debugShowCheckedModeBanner: false,
@@ -55,10 +48,9 @@ class CampusMarketApp extends ConsumerWidget {
             fontSize: 20,
             color: Colors.white,
           ),
-          backgroundColor: Colors.black,
         ),
       ),
-      routerConfig: goRouter,
+      routerConfig: router,
     );
   }
 }

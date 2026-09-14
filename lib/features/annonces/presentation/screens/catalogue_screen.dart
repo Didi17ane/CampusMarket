@@ -4,6 +4,7 @@ import '../../data/repositories/categories_repository.dart';
 import '../../data/models/articles_models.dart';
 import '../../data/models/categories_models.dart';
 import '../widgets/product_card.dart';
+import '../../../../core/widgets/custom_header.dart';
 import '../../../../core/widgets/search_bar_widget.dart';
 
 class CatalogueScreen extends StatefulWidget {
@@ -41,18 +42,19 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
   }
 
   List<ArticlesModels> _appliquerFiltres(
-      List<ArticlesModels> produits, List<CategoriesModels> categories) {
+    List<ArticlesModels> produits,
+    List<CategoriesModels> categories,
+  ) {
     final idsConnus = categories.map((c) => c.id).toSet();
 
     return produits.where((p) {
-      // on cache les articles vendus, directement ici dans l'écran
-      // (si le champ statut n'existe pas, on considère l'article actif par défaut)
       final statut = p.statut.isEmpty ? 'active' : p.statut;
       if (statut == 'vendue') return false;
 
       if (_categorieSelectionnee != null) {
         if (_categorieSelectionnee == _autresCategorieId) {
-          final estAutres = p.categorieId.isEmpty || !idsConnus.contains(p.categorieId);
+          final estAutres =
+              p.categorieId.isEmpty || !idsConnus.contains(p.categorieId);
           if (!estAutres) return false;
         } else if (p.categorieId != _categorieSelectionnee) {
           return false;
@@ -66,7 +68,8 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
       if (_texteRecherche.trim().isNotEmpty) {
         final texte = _texteRecherche.trim().toLowerCase();
         final titreCorrespond = p.nameArticle.toLowerCase().contains(texte);
-        final descriptionCorrespond = p.description.toLowerCase().contains(texte);
+        final descriptionCorrespond =
+            p.description.toLowerCase().contains(texte);
         if (!titreCorrespond && !descriptionCorrespond) return false;
       }
       return true;
@@ -87,6 +90,10 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const CustomHeader(
+        title: 'CampusMarket',
+        showLogo: true,
+      ),
       backgroundColor: const Color(0xFFF0F0F2),
       body: SafeArea(
         child: Column(
@@ -113,11 +120,18 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                           stream: _annoncesRepository.getProduits(),
                           builder: (context, produitSnapshot) {
                             if (produitSnapshot.hasError) {
-                              return Center(child: Text('Erreur : ${produitSnapshot.error}'));
+                              return Center(
+                                child: Text(
+                                  'Erreur : ${produitSnapshot.error}',
+                                ),
+                              );
                             }
-                            if (produitSnapshot.connectionState == ConnectionState.waiting) {
+                            if (produitSnapshot.connectionState ==
+                                ConnectionState.waiting) {
                               return const Center(
-                                child: CircularProgressIndicator(color: Color(0xFFFF6600)),
+                                child: CircularProgressIndicator(
+                                  color: Color(0xFFFF6600),
+                                ),
                               );
                             }
 
@@ -140,10 +154,12 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                             }
 
                             final debut = _pageActuelle * _taillePage;
-                            final fin = (debut + _taillePage > produitsFiltres.length)
-                                ? produitsFiltres.length
-                                : debut + _taillePage;
-                            final produitsAffiches = produitsFiltres.sublist(debut, fin);
+                            final fin =
+                                (debut + _taillePage > produitsFiltres.length)
+                                    ? produitsFiltres.length
+                                    : debut + _taillePage;
+                            final produitsAffiches =
+                                produitsFiltres.sublist(debut, fin);
 
                             return Column(
                               children: [
@@ -163,10 +179,12 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                                       return ProductCard(
                                         produit: produit,
                                         onTap: () {
-                                          ScaffoldMessenger.of(context).showSnackBar(
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
                                             SnackBar(
-                                                content:
-                                                    Text('Article : ${produit.nameArticle}')),
+                                              content: Text(
+                                                  'Article : ${produit.nameArticle}'),
+                                            ),
                                           );
                                         },
                                       );
@@ -207,12 +225,16 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
             icon: const Icon(Icons.arrow_back_ios, size: 16),
             label: const Text('Précédent'),
             style: TextButton.styleFrom(
-              foregroundColor: estPremierePage ? Colors.grey : const Color(0xFFFF6600),
+              foregroundColor:
+                  estPremierePage ? Colors.grey : const Color(0xFFFF6600),
             ),
           ),
           Text(
             'Page ${_pageActuelle + 1} / $totalPages',
-            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
           ),
           TextButton.icon(
             onPressed: estDernierePage
@@ -221,7 +243,8 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
             icon: const Icon(Icons.arrow_forward_ios, size: 16),
             label: const Text('Suivant'),
             style: TextButton.styleFrom(
-              foregroundColor: estDernierePage ? Colors.grey : const Color(0xFFFF6600),
+              foregroundColor:
+                  estDernierePage ? Colors.grey : const Color(0xFFFF6600),
             ),
           ),
         ],
@@ -245,17 +268,19 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
             },
           ),
           const SizedBox(width: 10),
-          ...categories.map((cat) => Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: _chip(
-                  label: cat.nameCategorie,
-                  active: _categorieSelectionnee == cat.id,
-                  onTap: () {
-                    setState(() => _categorieSelectionnee = cat.id);
-                    _reinitialiserPagination();
-                  },
-                ),
-              )),
+          ...categories.map(
+            (cat) => Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: _chip(
+                label: cat.nameCategorie,
+                active: _categorieSelectionnee == cat.id,
+                onTap: () {
+                  setState(() => _categorieSelectionnee = cat.id);
+                  _reinitialiserPagination();
+                },
+              ),
+            ),
+          ),
           _chip(
             label: 'Autre',
             active: _categorieSelectionnee == _autresCategorieId,
@@ -269,14 +294,20 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
     );
   }
 
-  Widget _chip({required String label, required bool active, required VoidCallback onTap}) {
+  Widget _chip({
+    required String label,
+    required bool active,
+    required VoidCallback onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Chip(
         label: Text(label),
         backgroundColor: active ? const Color(0xFFFF6600) : Colors.white,
         labelStyle: TextStyle(color: active ? Colors.white : Colors.black87),
-        side: BorderSide(color: active ? Colors.transparent : Colors.grey.shade300),
+        side: BorderSide(
+          color: active ? Colors.transparent : Colors.grey.shade300,
+        ),
       ),
     );
   }
@@ -295,11 +326,16 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
               decoration: InputDecoration(
                 hintText: 'Min',
                 isDense: true,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
               ),
               onChanged: (_) => _reinitialiserPagination(),
             ),
@@ -312,19 +348,29 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
               decoration: InputDecoration(
                 hintText: 'Max',
                 isDense: true,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
               ),
               onChanged: (_) => _reinitialiserPagination(),
             ),
           ),
           TextButton(
             onPressed: _reinitialiserFiltres,
-            child: const Text('Réinitialiser',
-                style: TextStyle(color: Color(0xFFFF6600), fontWeight: FontWeight.bold)),
+            child: const Text(
+              'Réinitialiser',
+              style: TextStyle(
+                color: Color(0xFFFF6600),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       ),
@@ -338,7 +384,10 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
         children: const [
           Icon(Icons.inventory_2_outlined, size: 64, color: Colors.grey),
           SizedBox(height: 12),
-          Text('Aucun article ne correspond à ces filtres', style: TextStyle(color: Colors.grey, fontSize: 16)),
+          Text(
+            'Aucun article ne correspond à ces filtres',
+            style: TextStyle(color: Colors.grey, fontSize: 16),
+          ),
         ],
       ),
     );

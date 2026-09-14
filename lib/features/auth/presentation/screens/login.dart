@@ -1,7 +1,7 @@
+import 'package:campusmarket/core/constants/theme_contants.dart';
 import 'package:campusmarket/features/auth/presentation/widgets/login_form.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../../core/constants/colors.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -23,7 +23,7 @@ class Login extends StatelessWidget {
                 child: Column(
                   children: [
                     Image.asset(
-                      'assets/images/Logo_Campus_market.png',
+                      'assets/images/CampusMarket_logo_icone.png',
                       width: 100,
                       height: 100,
                     ),
@@ -41,7 +41,7 @@ class Login extends StatelessWidget {
                           TextSpan(
                             text: "Market",
                             style: GoogleFonts.poppins(
-                              color: primaryColor,
+                              color: AppColors.orangePrincipal,
                               fontSize: 30,
                               fontWeight: FontWeight.bold,
                             ),

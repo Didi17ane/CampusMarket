@@ -30,7 +30,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         return '/login';
       }
 
-      // 3. Si l'utilisateur est connecté et tente d'aller sur Login/Signup -> redirection Accueil
+      // 3. Si l'utilisateur est connecté et tente d'aller sur Login/Signu p -> redirection Accueil
       final bool isAuthRoute =
           currentLocation == '/login' || currentLocation == '/signup';
       if (isConnected && isAuthRoute) {
@@ -45,7 +45,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       // Authentification
       GoRoute(path: '/login', builder: (context, state) => const Login()),
-      GoRoute(path: '/signup', builder: (context, state) => const SignIn()),
+      GoRoute(path: '/signup', builder: (context, state) => const SignUp()),
       GoRoute(
         path: '/profil',
         builder: (context, state) => const ProfilScreen(),
