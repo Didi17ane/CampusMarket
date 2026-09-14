@@ -7,22 +7,12 @@ import './routes/routes.dart';
 import 'firebase_options.dart';
 import 'core/providers/auth_providers.dart';
 
-// ID UTILISATEUR DE TEST — uniquement pour visualiser Profil/Mes annonces
-// avant que T-01 (Auth) soit terminé. À retirer dès que la vraie connexion
-// existe : il suffira de supprimer ce override.
-const String kTestUserId = 'vendeur_etudiant_id_999';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await dotenv.load(fileName: ".env");
 
-  runApp(
-    ProviderScope(
-      overrides: [currentUserIdProvider.overrideWithValue(kTestUserId)],
-      child: const CampusMarketApp(),
-    ),
-  );
+  runApp(ProviderScope(child: const CampusMarketApp()));
 }
 
 class CampusMarketApp extends ConsumerWidget {
