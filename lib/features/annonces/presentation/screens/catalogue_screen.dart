@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../data/repositories/annonces_repository.dart';
 import '../../data/repositories/categories_repository.dart';
 import '../../data/models/articles_models.dart';
@@ -69,8 +70,9 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
       if (_texteRecherche.trim().isNotEmpty) {
         final texte = _texteRecherche.trim().toLowerCase();
         final titreCorrespond = p.nameArticle.toLowerCase().contains(texte);
-        final descriptionCorrespond =
-            p.description.toLowerCase().contains(texte);
+        final descriptionCorrespond = p.description.toLowerCase().contains(
+          texte,
+        );
         if (!titreCorrespond && !descriptionCorrespond) return false;
       }
       return true;
@@ -159,10 +161,12 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                             final debut = _pageActuelle * _taillePage;
                             final fin =
                                 (debut + _taillePage > produitsFiltres.length)
-                                    ? produitsFiltres.length
-                                    : debut + _taillePage;
-                            final produitsAffiches =
-                                produitsFiltres.sublist(debut, fin);
+                                ? produitsFiltres.length
+                                : debut + _taillePage;
+                            final produitsAffiches = produitsFiltres.sublist(
+                              debut,
+                              fin,
+                            );
 
                             return Column(
                               children: [
@@ -171,24 +175,27 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                                     padding: const EdgeInsets.all(16),
                                     gridDelegate:
                                         const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      crossAxisSpacing: 16,
-                                      mainAxisSpacing: 16,
-                                      childAspectRatio: 0.68,
-                                    ),
+                                          crossAxisCount: 2,
+                                          crossAxisSpacing: 16,
+                                          mainAxisSpacing: 16,
+                                          childAspectRatio: 0.68,
+                                        ),
                                     itemCount: produitsAffiches.length,
                                     itemBuilder: (context, index) {
                                       final produit = produitsAffiches[index];
                                       return ProductCard(
                                         produit: produit,
                                         onTap: () {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                'Article : ${produit.nameArticle}',
-                                              ),
-                                            ),
+                                          // ScaffoldMessenger.of(context)
+                                          //     .showSnackBar(
+                                          //   SnackBar(
+                                          //     content: Text(
+                                          //       'Article : ${produit.nameArticle}',
+                                          //     ),
+                                          //   ),
+                                          // );
+                                          context.push(
+                                            "/article/${produit.id}/${produit.vendeurId}",
                                           );
                                         },
                                       );
@@ -229,8 +236,9 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
             icon: const Icon(Icons.arrow_back_ios, size: 16),
             label: const Text('Précédent'),
             style: TextButton.styleFrom(
-              foregroundColor:
-                  estPremierePage ? Colors.grey : const Color(0xFFFF6600),
+              foregroundColor: estPremierePage
+                  ? Colors.grey
+                  : const Color(0xFFFF6600),
             ),
           ),
           Text(
@@ -247,8 +255,9 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
             icon: const Icon(Icons.arrow_forward_ios, size: 16),
             label: const Text('Suivant'),
             style: TextButton.styleFrom(
-              foregroundColor:
-                  estDernierePage ? Colors.grey : const Color(0xFFFF6600),
+              foregroundColor: estDernierePage
+                  ? Colors.grey
+                  : const Color(0xFFFF6600),
             ),
           ),
         ],

@@ -216,10 +216,6 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                                 data.photo,
                                 ...data.imagesDetails,
                               ];
-                              print(
-                                "produit: ${article.asData?.value.imagesDetails}",
-                              );
-                              print("allImages: ${data.imagesDetails}");
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -453,17 +449,20 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                                   const Divider(height: 20, thickness: 1),
                                   userCourant.when(
                                     data: (userData) {
-                                      if (userData == null)
+                                      if (userData == null) {
                                         return const SizedBox.shrink();
+                                      }
                                       final isSeller =
                                           userData.id == widget.vendeurId;
-                                      if (isSeller)
+                                      if (isSeller) {
                                         return const SizedBox.shrink();
+                                      }
                                       final dejaCommente = commentsData.any(
                                         (c) => c.auteurId == userData.id,
                                       );
-                                      if (dejaCommente)
+                                      if (dejaCommente) {
                                         return const SizedBox.shrink();
+                                      }
                                       return Center(
                                         child: TextButton(
                                           onPressed: () => buttonSheet(),
@@ -473,7 +472,7 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                                         ),
                                       );
                                     },
-                                    error: (_, __) => const SizedBox.shrink(),
+                                    error: (_, _) => const SizedBox.shrink(),
                                     loading: () => const SizedBox.shrink(),
                                   ),
 
@@ -515,7 +514,6 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                                     },
                                     error:
                                         (Object error, StackTrace stackTrace) {
-                                          print("data error: $error");
                                           return Center(
                                             child: Text("Aucune commentaire"),
                                           );
