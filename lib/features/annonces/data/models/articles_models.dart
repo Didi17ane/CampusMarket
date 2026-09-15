@@ -14,7 +14,7 @@ class ArticlesModels {
   ArticlesModels({
     this.id = '',
     required this.photo,
-    this.imagesDetails = const[],
+    this.imagesDetails = const [],
     required this.nameArticle,
     required this.description,
     required this.prix,
