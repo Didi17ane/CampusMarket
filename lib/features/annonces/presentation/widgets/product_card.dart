@@ -46,7 +46,6 @@ class ProductCard extends StatelessWidget {
                           );
                         },
                         errorBuilder: (context, error, stackTrace) {
-                          // on affiche l'erreur réelle pour comprendre le problème
                           debugPrint('❌ Erreur image : $error');
                           return Container(
                             color: const Color(0xFFF0F0F2),
@@ -86,7 +85,7 @@ class ProductCard extends StatelessWidget {
                   Text(
                     '${produit.prix} FCFA',
                     style: const TextStyle(
-                      color: Color(0xFFFF6600), // notre orange pur
+                      color: Color(0xFFFF6600),
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),

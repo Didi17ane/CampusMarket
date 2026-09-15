@@ -5,6 +5,8 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
   final String? title; // le titre de la page 'oprionnel'
   final bool
   showLogo; // bool pour afficher le logo à coté du titre 'est à false par defaut'
+  final bool
+  showMenuButton; // affiche un bouton menu (☰) qui ouvre automatiquement le Drawer de l'écran
   final List<Widget>?
   rightAction; // Pour ajouter des element a droite s'il y en a (esx: menu, profile avatar, ...)
   final Widget? leftWidget; // Pour ajouter des element à gauche
@@ -18,7 +20,8 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     this.title,
     this.showLogo = false,
-    this.centerTitle = true,
+    this.showMenuButton = false,
+    this.centerTitle = false,
     this.rightAction,
     this.leftWidget,
     this.backgroundColor,
@@ -33,14 +36,15 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       toolbarHeight: toolbarHeight,
 
-      iconTheme: const IconThemeData(color: AppColors.blanc),
-
-      iconTheme: const IconThemeData(color: AppColors.blanc),
-      
-      // Widget a gauche si fournir remplace le bouton retour
+      // On gère nous-mêmes tout ce qui apparaît à gauche (leftWidget, ou rien).
+      // Flutter n'ajoute donc plus JAMAIS de bouton automatique tout seul,
+      // même si le Scaffold a un drawer — ça évite le doublon avec showMenuButton.
+      automaticallyImplyLeading: false,
       leading: leftWidget,
-      leadingWidth: leftWidget == null ? null : leadingWidth,
-      automaticallyImplyLeading: leftWidget == null,
+      // si aucun leftWidget n'est fourni, on ne réserve aucune place à gauche
+      // (au lieu des 56px par défaut) : le logo colle bien au bord, comme sur la maquette.
+      leadingWidth: leftWidget != null ? null : 0,
+      titleSpacing: 20,
 
       // Titre dynamique OU Logo de l'application
       title: Row(
@@ -64,12 +68,24 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
-      actions: rightAction,
+
+      // showMenuButton ajoute le bouton ☰ qui ouvre le Drawer.
+      // On garde aussi rightAction pour les autres icônes (favoris, recherche, etc.)
+      actions: [
+        if (showMenuButton)
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.menu, color: AppColors.blanc),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
+          ),
+        if (rightAction != null) ...rightAction!,
+      ],
 
       centerTitle: centerTitle,
     );
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(toolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

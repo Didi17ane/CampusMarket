@@ -1,13 +1,12 @@
-import 'package:campusmarket/features/annonces/data/models/articles_models.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import '../../data/repositories/annonces_repository.dart';
 import '../../data/repositories/categories_repository.dart';
-import '../../../annonces/data/models/categories_models.dart';
+import '../../data/models/articles_models.dart';
+import '../../data/models/categories_models.dart';
 import '../widgets/product_card.dart';
-import '../../../../core/widgets/app_header.dart';
-import '../../../../core/widgets/app_drawer.dart';
+import '../../../../core/widgets/custom_header.dart';
 import '../../../../core/widgets/search_bar_widget.dart';
+import '../../../../core/widgets/app_drawer.dart';
 
 class CatalogueScreen extends StatefulWidget {
   const CatalogueScreen({super.key});
@@ -50,6 +49,9 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
     final idsConnus = categories.map((c) => c.id).toSet();
 
     return produits.where((p) {
+      final statut = p.statut.isEmpty ? 'active' : p.statut;
+      if (statut == 'vendue') return false;
+
       if (_categorieSelectionnee != null) {
         if (_categorieSelectionnee == _autresCategorieId) {
           final estAutres =
@@ -64,13 +66,11 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
       final max = int.tryParse(_maxController.text);
       if (max != null && p.prix > max) return false;
 
-      // recherche par titre (insensible à la casse et aux espaces superflus)
       if (_texteRecherche.trim().isNotEmpty) {
         final texte = _texteRecherche.trim().toLowerCase();
         final titreCorrespond = p.nameArticle.toLowerCase().contains(texte);
-        final descriptionCorrespond = p.description.toLowerCase().contains(
-          texte,
-        );
+        final descriptionCorrespond =
+            p.description.toLowerCase().contains(texte);
         if (!titreCorrespond && !descriptionCorrespond) return false;
       }
       return true;
@@ -91,12 +91,16 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const AppDrawer(),
+      appBar: const CustomHeader(
+        title: 'CampusMarket',
+        showLogo: true,
+        showMenuButton: true,
+      ),
+      drawer: AppDrawer(),
       backgroundColor: const Color(0xFFF0F0F2),
       body: SafeArea(
         child: Column(
           children: [
-            AppHeader(title: 'CampusMarket', showMenuButton: true),
             SearchBarWidget(
               enabled: true,
               controller: _rechercheController,
@@ -155,12 +159,10 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                             final debut = _pageActuelle * _taillePage;
                             final fin =
                                 (debut + _taillePage > produitsFiltres.length)
-                                ? produitsFiltres.length
-                                : debut + _taillePage;
-                            final produitsAffiches = produitsFiltres.sublist(
-                              debut,
-                              fin,
-                            );
+                                    ? produitsFiltres.length
+                                    : debut + _taillePage;
+                            final produitsAffiches =
+                                produitsFiltres.sublist(debut, fin);
 
                             return Column(
                               children: [
@@ -169,29 +171,24 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                                     padding: const EdgeInsets.all(16),
                                     gridDelegate:
                                         const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          crossAxisSpacing: 16,
-                                          mainAxisSpacing: 16,
-                                          childAspectRatio: 0.68,
-                                        ),
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 16,
+                                      mainAxisSpacing: 16,
+                                      childAspectRatio: 0.68,
+                                    ),
                                     itemCount: produitsAffiches.length,
                                     itemBuilder: (context, index) {
-                                      ArticlesModels produit =
-                                          produitsAffiches[index];
+                                      final produit = produitsAffiches[index];
                                       return ProductCard(
                                         produit: produit,
                                         onTap: () {
-                                          // ScaffoldMessenger.of(
-                                          //   context,
-                                          // ).showSnackBar(
-                                          //   SnackBar(
-                                          //     content: Text(
-                                          //       'Produit : ${produit.nameArticle}',
-                                          //     ),
-                                          //   ),
-                                          // );
-                                          context.push(
-                                            '/article/${produit.id}/${produit.vendeurId}',
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                'Article : ${produit.nameArticle}',
+                                              ),
+                                            ),
                                           );
                                         },
                                       );
@@ -232,9 +229,8 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
             icon: const Icon(Icons.arrow_back_ios, size: 16),
             label: const Text('Précédent'),
             style: TextButton.styleFrom(
-              foregroundColor: estPremierePage
-                  ? Colors.grey
-                  : const Color(0xFFFF6600),
+              foregroundColor:
+                  estPremierePage ? Colors.grey : const Color(0xFFFF6600),
             ),
           ),
           Text(
@@ -251,9 +247,8 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
             icon: const Icon(Icons.arrow_forward_ios, size: 16),
             label: const Text('Suivant'),
             style: TextButton.styleFrom(
-              foregroundColor: estDernierePage
-                  ? Colors.grey
-                  : const Color(0xFFFF6600),
+              foregroundColor:
+                  estDernierePage ? Colors.grey : const Color(0xFFFF6600),
             ),
           ),
         ],
@@ -394,7 +389,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
           Icon(Icons.inventory_2_outlined, size: 64, color: Colors.grey),
           SizedBox(height: 12),
           Text(
-            'Aucun produit ne correspond à ces filtres',
+            'Aucun article ne correspond à ces filtres',
             style: TextStyle(color: Colors.grey, fontSize: 16),
           ),
         ],
