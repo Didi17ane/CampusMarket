@@ -31,6 +31,7 @@ class ArticlesModels {
     'vendeurId': vendeurId,
     'categorieId': categorieId,
     'statut': statut,
+    'imagesDetails': imagesDetails,
   };
 
   factory ArticlesModels.fromJson(
@@ -45,5 +46,6 @@ class ArticlesModels {
     vendeurId: json['vendeurId'] ?? '',
     categorieId: json['categorieId'] ?? '',
     statut: json['statut'] ?? 'active',
+    imagesDetails: List<String>.from(json['imagesDetails'] ?? []),
   );
 }

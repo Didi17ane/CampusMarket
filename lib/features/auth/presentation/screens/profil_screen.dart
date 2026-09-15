@@ -3,9 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/providers/navigation_provider.dart';
+import '../../../../core/widgets/custom_header.dart';
+import '../../../../core/widgets/app_drawer.dart';
 import '../providers/user_provider.dart';
 import 'modifier_profil_screen.dart';
-import '../../../../core/widgets/app_drawer.dart';
 
 class ProfilScreen extends ConsumerWidget {
   const ProfilScreen({super.key});
@@ -16,6 +17,21 @@ class ProfilScreen extends ConsumerWidget {
 
     return Scaffold(
       drawer: const AppDrawer(),
+      appBar: CustomHeader(
+        title: 'Mon profil',
+        showLogo: true,
+        centerTitle: false,
+        leftWidget: const SizedBox.shrink(),
+        leadingWidth: 0,
+        rightAction: [
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
+          ),
+        ],
+      ),
       body: userAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, _) => Center(child: Text('Erreur : $err')),
@@ -25,125 +41,88 @@ class ProfilScreen extends ConsumerWidget {
           }
           final initiales = _initiales(user.name, user.lastname);
 
-          return CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                backgroundColor: Colors.black,
-                expandedHeight: 220,
-                pinned: true,
-                automaticallyImplyLeading: false,
-                iconTheme: const IconThemeData(color: Colors.white),
-                title: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(
-                      'assets/images/CampusMarket_logo_icone.png',
-                      width: 24,
-                      height: 24,
-                    ),
-                    const SizedBox(width: 8),
-                    const Text(
-                      'Mon profil',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
-                ),
-                actions: [
-                  Builder(
-                    builder: (context) => IconButton(
-                      icon: const Icon(Icons.menu, color: Colors.white),
-                      onPressed: () => Scaffold.of(context).openDrawer(),
-                    ),
-                  ),
-                ],
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Container(
-                    color: Colors.black,
-                    child: Center(
-                      child: CircleAvatar(
-                        radius: 40,
-                        backgroundColor: const Color(0xFFFF6B00),
-                        child: Text(
-                          initiales,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 16),
-                    Text(
-                      '${user.name} ${user.lastname}',
+          return ListView(
+            children: [
+              Container(
+                width: double.infinity,
+                color: Colors.black,
+                padding: const EdgeInsets.symmetric(vertical: 24),
+                child: Center(
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundColor: const Color(0xFFFF6B00),
+                    child: Text(
+                      initiales,
                       style: const TextStyle(
-                        fontSize: 18,
+                        color: Colors.white,
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(user.email, style: TextStyle(color: Colors.grey[600])),
-                    const SizedBox(height: 24),
-                    _ProfilTile(
-                      label: 'Modifier mes informations',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => ModifierProfilScreen(user: user),
-                          ),
-                        );
-                      },
-                    ),
-                    _ProfilTile(
-                      label: 'Paramètres de notification',
-                      onTap: () => _bientotDisponible(context),
-                    ),
-                    _ProfilTile(
-                      label: 'Aide & support',
-                      onTap: () => _bientotDisponible(context),
-                    ),
-                    const SizedBox(height: 24),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: const Color(0xFFFF6B00),
-                            side: const BorderSide(color: Color(0xFFFF6B00)),
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                          ),
-                          onPressed: () async {
-                            await FirebaseAuth.instance.signOut();
-                            ref.read(currentTabIndexProvider.notifier).state =
-                                0;
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Vous êtes déconnecté(e)'),
-                              ),
-                            );
-                            if (context.mounted) {
-                              context.go('/');
-                            }
-                          },
-                          child: const Text('Se déconnecter'),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                  ],
+                  ),
                 ),
               ),
+              const SizedBox(height: 16),
+              Text(
+                '${user.name} ${user.lastname}',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                user.email,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey[600]),
+              ),
+              const SizedBox(height: 24),
+              _ProfilTile(
+                label: 'Modifier mes informations',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ModifierProfilScreen(user: user),
+                    ),
+                  );
+                },
+              ),
+              _ProfilTile(
+                label: 'Paramètres de notification',
+                onTap: () => _bientotDisponible(context),
+              ),
+              _ProfilTile(
+                label: 'Aide & support',
+                onTap: () => _bientotDisponible(context),
+              ),
+              const SizedBox(height: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: const Color(0xFFFF6B00),
+                      side: const BorderSide(color: Color(0xFFFF6B00)),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    onPressed: () async {
+                      await FirebaseAuth.instance.signOut();
+                      ref.read(currentTabIndexProvider.notifier).state = 0;
+                      if (context.mounted) {
+                        context.go('/');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Vous êtes déconnecté(e)')),
+                        );
+                      }
+                    },
+                    child: const Text('Se déconnecter'),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
             ],
           );
         },
@@ -152,9 +131,9 @@ class ProfilScreen extends ConsumerWidget {
   }
 
   void _bientotDisponible(BuildContext context) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Bientôt disponible')));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Bientôt disponible')),
+    );
   }
 
   String _initiales(String name, String lastname) {

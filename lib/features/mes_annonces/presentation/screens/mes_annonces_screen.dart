@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../providers/mes_annonces_provider.dart';
 import '../widgets/annonce_card.dart';
 import '../../../../core/widgets/app_drawer.dart';
+import '../../../../core/widgets/custom_header.dart';
 import 'modifier_annonce_screen.dart';
 
 class MesAnnoncesScreen extends ConsumerWidget {
@@ -16,11 +17,20 @@ class MesAnnoncesScreen extends ConsumerWidget {
     return Scaffold(
       drawer: const AppDrawer(),
       backgroundColor: const Color(0xFFF5F5F5),
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        actions: [
+      appBar: CustomHeader(
+        // Le nombre d'annonces reste toujours visible, sur 2 lignes.
+        title: annoncesAsync.when(
+          data: (annonces) =>
+              'Mes annonces\n${annonces.length} annonce${annonces.length > 1 ? 's' : ''} publiée${annonces.length > 1 ? 's' : ''}',
+          loading: () => 'Mes annonces',
+          error: (_, __) => 'Mes annonces',
+        ),
+        showLogo: true,
+        centerTitle: false,
+        leftWidget: const SizedBox.shrink(),
+        leadingWidth: 0,
+        toolbarHeight: 64,
+        rightAction: [
           Builder(
             builder: (context) => IconButton(
               icon: const Icon(Icons.menu),
@@ -28,34 +38,13 @@ class MesAnnoncesScreen extends ConsumerWidget {
             ),
           ),
         ],
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              'assets/images/CampusMarket_logo_icone.png',
-              width: 24,
-              height: 24,
-            ),
-            const SizedBox(width: 8),
-            annoncesAsync.when(
-              data: (annonces) => Text(
-                'Mes annonces\n${annonces.length} annonce${annonces.length > 1 ? 's' : ''} publiée${annonces.length > 1 ? 's' : ''}',
-                style: const TextStyle(fontSize: 16),
-              ),
-              loading: () => const Text('Mes annonces'),
-              error: (_, __) => const Text('Mes annonces'),
-            ),
-          ],
-        ),
       ),
       body: annoncesAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, _) => Center(child: Text('Erreur : $err')),
         data: (annonces) {
           if (annonces.isEmpty) {
-            return const Center(
-              child: Text('Aucune annonce publiée pour le moment.'),
-            );
+            return const Center(child: Text('Aucune annonce publiée pour le moment.'));
           }
           return ListView.builder(
             padding: const EdgeInsets.symmetric(vertical: 12),
@@ -86,11 +75,7 @@ class MesAnnoncesScreen extends ConsumerWidget {
     );
   }
 
-  void _confirmerSuppression(
-    BuildContext context,
-    WidgetRef ref,
-    String articleId,
-  ) {
+  void _confirmerSuppression(BuildContext context, WidgetRef ref, String articleId) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
