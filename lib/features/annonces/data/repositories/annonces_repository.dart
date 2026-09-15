@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/articles_models.dart';
+
 class AnnoncesRepository {
   final CollectionReference _produitsRef =
       FirebaseFirestore.instance.collection('Articles');
 
   Stream<List<ArticlesModels>> getProduits() {
-    return _produitsRef
-        .where('statut', isEqualTo: 'active') 
-        .snapshots()
-        .map((snapshot) {
+    return _produitsRef.snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
         return ArticlesModels(
@@ -19,7 +17,7 @@ class AnnoncesRepository {
           prix: data['prix'] ?? 0,
           categorieId: data['categorieId'] ?? '',
           vendeurId: data['vendeurId'] ?? '',
-
+          statut: (data['statut'] ?? 'active').toString(),
         );
       }).toList();
     });

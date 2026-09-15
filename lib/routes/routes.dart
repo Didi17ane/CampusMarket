@@ -1,3 +1,4 @@
+import 'package:campusmarket/features/articles_details/presentation/screens/article_detail_screen.dart';
 import 'package:flutter/material.dart';
 import '../core/navigation/main_shell.dart';
 import 'package:go_router/go_router.dart';
@@ -14,6 +15,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 
   return GoRouter(
     initialLocation: '/', // L'application démarre bien sur l'accueil
+
     refreshListenable: authNotifier,
     redirect: (BuildContext context, GoRouterState state) {
       final bool isConnected = authNotifier.isConnected;
@@ -58,6 +60,17 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/publier',
         builder: (context, state) => const PublierAnnonceScreen(),
+      ),
+      GoRoute(
+        path: '/article/:articleId/:vendeurId',
+        builder: (context, state) {
+          final articleId = state.pathParameters['articleId']!;
+          final vendeurId = state.pathParameters['vendeurId']!;
+          return ArticleDetailScreen(
+            articleId: articleId,
+            vendeurId: vendeurId,
+          );
+        },
       ),
     ],
   );

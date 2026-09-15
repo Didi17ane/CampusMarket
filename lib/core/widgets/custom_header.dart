@@ -12,6 +12,10 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leftWidget; // Pour ajouter des element à gauche
   final Color? backgroundColor; // la couleur d'arrière (à noir par defaut)
   final bool centerTitle; // le titre doit-être centré ?
+  final double
+  toolbarHeight; // hauteur du header (par defaut kToolbarHeight, plus grand si titre sur 2 lignes)
+  final double
+  leadingWidth; // largeur réservée à gauche (56 par defaut, mettre 0 si leftWidget vide pour ne pas laisser d'espace)
   const CustomHeader({
     super.key,
     this.title,
@@ -21,6 +25,8 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
     this.rightAction,
     this.leftWidget,
     this.backgroundColor,
+    this.toolbarHeight = kToolbarHeight,
+    this.leadingWidth = 56,
   });
 
   @override
@@ -28,6 +34,7 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: backgroundColor ?? AppColors.noir,
       elevation: 0,
+      toolbarHeight: toolbarHeight,
 
       // On gère nous-mêmes tout ce qui apparaît à gauche (leftWidget, ou rien).
       // Flutter n'ajoute donc plus JAMAIS de bouton automatique tout seul,

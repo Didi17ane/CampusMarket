@@ -6,7 +6,6 @@ import '../../data/models/categories_models.dart';
 import '../widgets/product_card.dart';
 import '../../../../core/widgets/custom_header.dart';
 import '../../../../core/widgets/search_bar_widget.dart';
-
 import '../../../../core/widgets/app_drawer.dart';
 
 class CatalogueScreen extends StatefulWidget {
@@ -90,7 +89,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
   }
 
   @override
-      Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomHeader(
         title: 'CampusMarket',
@@ -187,7 +186,8 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                                               .showSnackBar(
                                             SnackBar(
                                               content: Text(
-                                                  'Article : ${produit.nameArticle}'),
+                                                'Article : ${produit.nameArticle}',
+                                              ),
                                             ),
                                           );
                                         },

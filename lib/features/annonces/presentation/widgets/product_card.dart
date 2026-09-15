@@ -1,15 +1,11 @@
+import 'package:campusmarket/features/annonces/data/models/articles_models.dart';
 import 'package:flutter/material.dart';
-import '../../data/models/articles_models.dart';
 
 class ProductCard extends StatelessWidget {
   final ArticlesModels produit;
   final VoidCallback onTap;
 
-  const ProductCard({
-    super.key,
-    required this.produit,
-    required this.onTap,
-  });
+  const ProductCard({super.key, required this.produit, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +27,9 @@ class ProductCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(20),
+              ),
               child: AspectRatio(
                 aspectRatio: 1.4,
                 child: produit.photo.isNotEmpty
@@ -41,7 +39,10 @@ class ProductCard extends StatelessWidget {
                         loadingBuilder: (context, child, progress) {
                           if (progress == null) return child;
                           return const Center(
-                            child: Text('Chargement...', style: TextStyle(fontSize: 10)),
+                            child: Text(
+                              'Chargement...',
+                              style: TextStyle(fontSize: 10),
+                            ),
                           );
                         },
                         errorBuilder: (context, error, stackTrace) {
@@ -59,7 +60,10 @@ class ProductCard extends StatelessWidget {
                       )
                     : Container(
                         color: const Color(0xFFF0F0F2),
-                        child: const Text('photo vide', style: TextStyle(fontSize: 10)),
+                        child: const Text(
+                          'photo vide',
+                          style: TextStyle(fontSize: 10),
+                        ),
                       ),
               ),
             ),
@@ -72,7 +76,10 @@ class ProductCard extends StatelessWidget {
                     produit.nameArticle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(
