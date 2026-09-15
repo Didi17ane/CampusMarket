@@ -29,9 +29,15 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: backgroundColor ?? AppColors.noir,
       elevation: 0,
 
-      // Widget a gauche si fournir remplace le bouton retour
+      // On gère nous-mêmes tout ce qui apparaît à gauche (leftWidget, ou rien).
+      // Flutter n'ajoute donc plus JAMAIS de bouton automatique tout seul,
+      // même si le Scaffold a un drawer — ça évite le doublon avec showMenuButton.
+      automaticallyImplyLeading: false,
       leading: leftWidget,
-      automaticallyImplyLeading: leftWidget == null,
+      // si aucun leftWidget n'est fourni, on ne réserve aucune place à gauche
+      // (au lieu des 56px par défaut) : le logo colle bien au bord, comme sur la maquette.
+      leadingWidth: leftWidget != null ? null : 0,
+      titleSpacing: 20,
 
       // Titre dynamique OU Logo de l'application
       title: Row(
@@ -56,7 +62,7 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
 
-      // showMenuButton ajoute automatiquement le bouton ☰ qui ouvre le Drawer.
+      // showMenuButton ajoute le bouton ☰ qui ouvre le Drawer.
       // On garde aussi rightAction pour les autres icônes (favoris, recherche, etc.)
       actions: [
         if (showMenuButton)

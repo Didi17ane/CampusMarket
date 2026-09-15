@@ -92,20 +92,11 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
   @override
       Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomHeader(
-          title: 'CampusMarket',
-          showLogo: true,
-          rightAction: [
-            Builder(
-              builder: (context) => IconButton(
-                icon: const Icon(Icons.menu, color: Colors.white),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              ),
-            ),
-          ],
-        ),
+      appBar: const CustomHeader(
+        title: 'CampusMarket',
+        showLogo: true,
+        showMenuButton: true,
+      ),
       drawer: AppDrawer(),
       backgroundColor: const Color(0xFFF0F0F2),
       body: SafeArea(
