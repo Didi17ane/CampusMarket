@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/providers/user_provider.dart';
 import '../providers/navigation_provider.dart';
-import 'package:campusmarket/features/annonces/presentation/screens/publier_annonce_screen.dart';
-import 'package:go_router/go_router.dart';
 
-/// Menu latéral (drawer), conforme à la maquette (page "Menu latéral").
-/// Regroupe les mêmes destinations que la bottom nav + Aide & support et
-/// Se déconnecter. À utiliser sur chaque écran principal via `drawer: const AppDrawer()`.
+/// Menu latéral (drawer). Ne contient QUE ce qui n'est pas déjà dans la
+/// bottom nav (Catalogue/Publier/Annonces/Profil), pour éviter les
+/// doublons signalés par le mentor : Mes favoris, Aide & support,
+/// Se déconnecter.
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
 
@@ -24,7 +24,7 @@ class AppDrawer extends ConsumerWidget {
             color: Colors.black,
             padding: const EdgeInsets.fromLTRB(20, 55, 20, 16),
             child: Image.asset(
-              'assets/logo/CampusMarket_logo_horizontal_fond_noir.png',
+              'assets/images/CampusMarket_logo_horizontal_fond_noir.png',
               height: 48,
               fit: BoxFit.contain,
               alignment: Alignment.centerLeft,
@@ -87,45 +87,16 @@ class AppDrawer extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           _DrawerItem(
-            icon: Icons.home_outlined,
-            label: 'Catalogue',
+            icon: Icons.favorite_border,
+            label: 'Mes favoris',
             onTap: () => _bientotDisponible(context),
           ),
-          _DrawerItem(
-            icon: Icons.search,
-            label: 'Rechercher',
-            onTap: () => _bientotDisponible(context),
-          ),
-          _DrawerItem(
-            icon: Icons.add_circle_outline,
-            label: 'Publier une annonce',
-            onTap: () {
-              Navigator.pop(context); // ferme le drawer
-              context.push('/publier');
-            },
-          ),
-          _DrawerItem(
-            icon: Icons.storefront_outlined,
-            label: 'Mes annonces',
-            onTap: () {
-              Navigator.pop(context);
-              ref.read(currentTabIndexProvider.notifier).state = 2;
-            },
-          ),
-          _DrawerItem(
-            icon: Icons.person_outline,
-            label: 'Mon profil',
-            onTap: () {
-              Navigator.pop(context);
-              ref.read(currentTabIndexProvider.notifier).state = 3;
-            },
-          ),
-          const Divider(),
           _DrawerItem(
             icon: Icons.help_outline,
             label: 'Aide & support',
             onTap: () => _bientotDisponible(context),
           ),
+          const Divider(),
           _DrawerItem(
             icon: Icons.logout,
             label: 'Se déconnecter',
@@ -133,6 +104,13 @@ class AppDrawer extends ConsumerWidget {
             onTap: () async {
               Navigator.pop(context);
               await FirebaseAuth.instance.signOut();
+              ref.read(currentTabIndexProvider.notifier).state = 0; // Catalogue
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Vous êtes déconnecté(e)')),
+                );
+                context.go('/');
+              }
             },
           ),
           const Spacer(),

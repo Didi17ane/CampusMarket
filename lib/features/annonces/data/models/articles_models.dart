@@ -14,7 +14,7 @@ class ArticlesModels {
   ArticlesModels({
     this.id = '',
     required this.photo,
-    this.imagesDetails = const[],
+    this.imagesDetails = const [],
     required this.nameArticle,
     required this.description,
     required this.prix,
@@ -31,6 +31,7 @@ class ArticlesModels {
     'vendeurId': vendeurId,
     'categorieId': categorieId,
     'statut': statut,
+    'imagesDetails': imagesDetails,
   };
 
   factory ArticlesModels.fromJson(
@@ -45,5 +46,6 @@ class ArticlesModels {
     vendeurId: json['vendeurId'] ?? '',
     categorieId: json['categorieId'] ?? '',
     statut: json['statut'] ?? 'active',
+    imagesDetails: List<String>.from(json['imagesDetails'] ?? []),
   );
 }

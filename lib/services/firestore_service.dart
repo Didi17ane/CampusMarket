@@ -82,6 +82,18 @@ class FirestoreService {
     });
   }
 
+  Future<String> getCategorieNomById(String categorieId) async {
+    try {
+      final doc = await _db.collection('Categories').doc(categorieId).get();
+      if (doc.exists) {
+        return (doc.data()?['nom'] ?? '').toString();
+      }
+      return '';
+    } catch (e) {
+      throw Exception("Erreur lors de la récupération de la catégorie: $e");
+    }
+  }
+
   /// --------------------  GESTION DES ARTICLES --------------------
   // AJOUT D'UN ARTICLE
   Future<String> addArticles(ArticlesModels articles) async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/widgets/custom_header.dart';
 import '../providers/user_provider.dart';
 import '../../data/models/users_models.dart';
 
@@ -56,10 +57,9 @@ class _ModifierProfilScreenState extends ConsumerState<ModifierProfilScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-        title: const Text('Modifier mes informations'),
+      appBar: const CustomHeader(
+        title: 'Modifier mes informations',
+        showLogo: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

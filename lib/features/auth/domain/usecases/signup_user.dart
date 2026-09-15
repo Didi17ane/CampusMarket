@@ -32,13 +32,13 @@ Future<User?> signUpUser({
     switch (e.code) {
       case 'email-already-in-use':
         throw Exception('Email deja utilisé');
+      case 'weak-password':
+        throw Exception("Mot de passe faible 6 caractères minimim");
       default:
-        print("Erreur lors de l'authentification ${e.message}");
-        Exception("Erreur intervenue lors de l'authentification ");
+        throw Exception("Erreur intervenue lors de l'authentification ");
     }
-    rethrow;
   } catch (e) {
-    print("Database Error: $e");
+    Exception("Database Error: $e");
     rethrow;
   }
 }
