@@ -6,7 +6,7 @@ import 'package:snackify/enums/snack_enums.dart';
 import 'package:snackify/snackify.dart';
 import '../../data/models/users_models.dart';
 import '../../domain/usecases/signup_user.dart';
-import '../../../../core/constants/colors.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class SignupForm extends StatefulWidget {
   const SignupForm({super.key});
@@ -26,6 +26,8 @@ class _SignupFormState extends State<SignupForm> {
   final _emailUserController = TextEditingController();
   final _phoneNumberUserController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  PhoneNumber? __entreeNumUser;
 
   void setIsObscured() {
     setState(() {
@@ -123,22 +125,20 @@ class _SignupFormState extends State<SignupForm> {
               },
             ),
             SizedBox(height: 10),
-            TextFormField(
-              controller: _phoneNumberUserController,
-              keyboardType: TextInputType.phone,
-              decoration: InputDecoration(
-                labelText: 'Numero de Telephone',
-                filled: true,
-                fillColor: Colors.grey.shade100,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              validator: (String? value) {
-                return (value != null && value.isEmpty)
-                    ? 'Vous devez saisir un mot de passe'
-                    : null;
+            InternationalPhoneNumberInput(
+              onInputChanged: (PhoneNumber number) {
+                __entreeNumUser = number;
               },
+              initialValue: PhoneNumber(
+                isoCode: 'CI',
+              ),
+              inputBorder: OutlineInputBorder(),
+              textFieldController: _phoneNumberUserController,
+              keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+              selectorConfig: SelectorConfig(
+                selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+              ),
+              hintText: "Numero de telephone",
             ),
             SizedBox(height: 10),
             TextFormField(
@@ -206,7 +206,7 @@ class _SignupFormState extends State<SignupForm> {
                         name: _nameUserController.text.trim(),
                         lastname: _lastNameUserController.text.trim(),
                         email: _emailUserController.text.trim(),
-                        phoneNumber: _phoneNumberUserController.text.trim(),
+                        phoneNumber: __entreeNumUser!.phoneNumber ?? "",
                       ),
                       password: _passwordController.text.trim(),
                     );
@@ -217,7 +217,7 @@ class _SignupFormState extends State<SignupForm> {
                       type: SnackType.error,
                       position: SnackPosition.top,
                       title: Text(
-                        ' Oops',
+                        ' Oops!',
                         style: GoogleFonts.poppins(color: Colors.white),
                       ),
                       subtitle: Text(
