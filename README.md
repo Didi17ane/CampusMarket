@@ -2,7 +2,7 @@
 
 <img src="assets/images/CampusMarket_logo_horizontal_fond_clair.png" alt="CampusMarket" width="360"/>
 
-### Achète, vends et échange entre étudiants — simplement.
+### Achète, vends et échange entre étudiants : simplement.
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
 [![Firebase](https://img.shields.io/badge/Firebase-Firestore%20%7C%20Auth-FFCA28?logo=firebase&logoColor=black)](https://firebase.google.com)
@@ -11,7 +11,7 @@
 [![CI](https://github.com/Didi17ane/CampusMarket/actions/workflows/ci.yml/badge.svg)](https://github.com/Didi17ane/CampusMarket/actions)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey)](#licence)
 
-**Groupe 23 — FlutterFire Summer Camp 2026** · Catégorie *E-Commerce & Services Locaux*
+**Groupe 23 : FlutterFire Summer Camp 2026** · Catégorie *E-Commerce & Services Locaux*
 
 </div>
 
@@ -35,7 +35,7 @@
   - [Configuration Firebase](#configuration-firebase)
   - [Variables d'environnement (`.env`)](#variables-denvironnement-env)
 - [📂 Structure du projet](#-structure-du-projet)
-- [👥 Équipe — Groupe 23](#-équipe--groupe-23)
+- [👥 Équipe : Groupe 23](#-équipe--groupe-23)
 - [🗺 Roadmap](#-roadmap)
 - [📄 Licence](#-licence)
 
@@ -62,7 +62,7 @@ Projet réalisé dans le cadre du **FlutterFire Summer Camp 2026**, du 2 au 16 s
 ## 🛠 Stack technique
 
 - **Framework** : [Flutter](https://flutter.dev) (Dart)
-- **Backend** : [Firebase](https://firebase.google.com) — Firestore (base de données), Firebase Auth (authentification)
+- **Backend** : [Firebase](https://firebase.google.com) : Firestore (base de données), Firebase Auth (authentification)
 - **Stockage images** : [Cloudinary](https://cloudinary.com)
 - **Gestion d'état** : [flutter_riverpod](https://riverpod.dev)
 - **Navigation** : [go_router](https://pub.dev/packages/go_router)
@@ -174,7 +174,7 @@ CampusMarket/
 └── pubspec.yaml                # Dépendances du projet
 ```
 
-## 👥 Équipe — Groupe 23
+## 👥 Équipe : Groupe 23
 
 | Membre | Rôle |
 |---|---|
@@ -200,5 +200,5 @@ Projet académique réalisé dans le cadre du FlutterFire Summer Camp 2026. Usag
 ---
 
 <div align="center">
-<sub>Fait avec 🧡 par le Groupe 23 — FlutterFire Summer Camp 2026</sub>
+<sub>Fait avec 🧡 par le Groupe 23 : FlutterFire Summer Camp 2026</sub>
 </div>
