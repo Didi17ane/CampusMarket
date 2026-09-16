@@ -4,36 +4,75 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import './routes/routes.dart';
+import './core/constants/theme_contants.dart';
 import 'firebase_options.dart';
+import './routes/routes.dart';
 import './features/auth/presentation/screens/user_picture.dart';
-import 'core/providers/auth_providers.dart';
 
-// ID UTILISATEUR DE TEST — uniquement pour visualiser Profil/Mes annonces
-// avant que T-01 (Auth) soit terminé. À retirer dès que la vraie connexion
-// existe : il suffira de supprimer ce override.
-const String kTestUserId = 'vendeur_etudiant_id_999';
-
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await dotenv.load(fileName: ".env");
-
-  runApp(
-    ProviderScope(
-      overrides: [currentUserIdProvider.overrideWithValue(kTestUserId)],
-      // child: const CampusMarketApp(),
-      child: const CampusMarketApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: CampusMarketApp()));
 }
 
-class CampusMarketApp extends ConsumerWidget {
+class CampusMarketApp extends StatefulWidget {
   const CampusMarketApp({super.key});
 
   @override
+  State<CampusMarketApp> createState() => _CampusMarketAppState();
+}
+
+class _CampusMarketAppState extends State<CampusMarketApp> {
+  static const Duration _splashDuration = Duration(seconds: 5);
+
+  late final Future<void> _initialization;
+  bool _isReady = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initialization = Future.wait<dynamic>([
+      _initializeFirebase(),
+      dotenv.load(fileName: ".env"),
+    ]).then((_) {});
+    _initializeAndShowApplication();
+  }
+
+  Future<void> _initializeFirebase() async {
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    }
+  }
+
+  Future<void> _initializeAndShowApplication() async {
+    await Future.wait<dynamic>([
+      _initialization,
+      Future.delayed(_splashDuration),
+    ]);
+
+    if (!mounted) return;
+    setState(() => _isReady = true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _isReady
+        ? const CampusMarketRouter()
+        : const Directionality(
+            textDirection: TextDirection.ltr,
+            child: SplashScreen(),
+          );
+  }
+}
+
+class CampusMarketRouter extends ConsumerWidget {
+  const CampusMarketRouter({super.key});
+
+  @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final goRouter = ref.watch(routerProvider);
+    final router = ref.watch(routerProvider);
+
     return MaterialApp.router(
       title: 'CampusMarket',
       debugShowCheckedModeBanner: false,
@@ -58,10 +97,29 @@ class CampusMarketApp extends ConsumerWidget {
             fontSize: 20,
             color: Colors.white,
           ),
-          backgroundColor: Colors.black,
+          iconTheme: IconThemeData(color: AppColors.blanc),
         ),
       ),
-      routerConfig: goRouter,
+      routerConfig: router,
+    );
+  }
+}
+
+class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Image.asset(
+          'assets/images/CampusMarket_logo_icone.png',
+          width: 180,
+          height: 180,
+          fit: BoxFit.contain,
+        ),
+      ),
     );
   }
 }

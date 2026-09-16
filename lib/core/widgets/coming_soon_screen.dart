@@ -19,7 +19,11 @@ class ComingSoonScreen extends StatelessWidget {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset('assets/icon/icon.png', width: 24, height: 24),
+            Image.asset(
+              'assets/images/CampusMarket_logo_icone.png',
+              width: 24,
+              height: 24,
+            ),
             const SizedBox(width: 8),
             Text(titre),
           ],
