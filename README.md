@@ -177,11 +177,11 @@ CampusMarket/
 |---|---|
 | **Koffi Beugré Marie Didiane** | Cheffe de groupe · Profil, Mes annonces, Architecture & intégration |
 | **N'Guessan Kouakou Yann Alex** | Modèles de données, Authentification |
-| **Baba Traoré Hannatou** | Catalogue, Filtres |
+| **Baba Traoré Hannatou** | Catalogue, Filtres, Recherche |
 | **Nomenjanahary Maddy Ruddy Anderson Billal** | Détail produit, Commentaires, Contact vendeur |
-| **Maniga Topka Abou** | Publication d'annonce, Recherche |
+| **Maniga Topka Abou** | Publication d'annonce, Architecture & intégration |
 
-*Mentor : David Bongouade*
+*Mentor : Jacques Uwonda*
 
 ## 🗺 Roadmap
 
