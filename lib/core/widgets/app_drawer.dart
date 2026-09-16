@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
+import '../../features/auth/presentation/providers/route_auth_provider.dart';
 import '../../features/auth/presentation/providers/user_provider.dart';
 import '../providers/navigation_provider.dart';
 
@@ -15,6 +16,7 @@ class AppDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userAsync = ref.watch(currentUserProvider);
+    final authNotifier = ref.watch(routerAuthNotifierProvider);
 
     return Drawer(
       child: Column(
@@ -98,10 +100,18 @@ class AppDrawer extends ConsumerWidget {
           ),
           const Divider(),
           _DrawerItem(
-            icon: Icons.logout,
-            label: 'Se déconnecter',
-            color: Colors.red,
+            icon: authNotifier.isConnected ? Icons.logout : Icons.login,
+            label: authNotifier.isConnected ? 'Se déconnecter' : 'Se connecter',
+            color: authNotifier.isConnected ? Colors.red : null,
             onTap: () async {
+              if (!authNotifier.isConnected) {
+                Navigator.pop(context);
+                if (context.mounted) {
+                  context.go('/login');
+                }
+                return;
+              }
+
               Navigator.pop(context);
               await FirebaseAuth.instance.signOut();
               ref.read(currentTabIndexProvider.notifier).state = 0; // Catalogue
