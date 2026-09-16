@@ -13,12 +13,11 @@ Future<void> ouvrirWhatsApp(String numeroTelephone, {String? message}) async {
     throw Exception('Numéro de téléphone invalide : $numeroTelephone');
   }
 
-  final texteEncode = message != null ? Uri.encodeComponent(message) : null;
-
+  // ✅ Après : on laisse Uri.https faire TOUT le travail d'encodage, une seule fois
   final url = Uri.https(
     'wa.me',
     '/$numeroNettoye',
-    texteEncode != null ? {'text': texteEncode} : null,
+    message != null ? {'text': message} : null,
   );
 
   if (!await canLaunchUrl(url)) {
