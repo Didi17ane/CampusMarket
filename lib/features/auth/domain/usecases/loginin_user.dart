@@ -8,12 +8,8 @@ Future<User?> LogIn(String email, String password) async {
     return user;
   } on FirebaseAuthException catch (e) {
     switch (e.code) {
-      case 'user-not-found':
-        throw Exception("L'utilisateur n'existe pas");
-      case 'wrong-password':
-        throw Exception("Mot de passe Incorrect");
-      case 'invalid-password':
-        throw Exception("Mot de passe Incorrect");
+      case 'user-not-found' || 'invalid-credential':
+        throw Exception("Utilisateur ou mot de passe incorrect");
       default:
         print("Database error $e");
         throw Exception("Database error");

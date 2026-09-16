@@ -153,13 +153,13 @@ class _LoginFormState extends State<LoginForm> {
                       _passwordUserController.text.trim(),
                     );
                   } catch (e) {
-                    final message = e.toString().replaceAll('Exception', "");
+                    final message = e.toString().replaceAll('Exception:', "");
                     Snackify.show(
                       context: context,
                       type: SnackType.error,
                       position: SnackPosition.top,
                       title: Text(
-                        ' Oops',
+                        ' Oops!',
                         style: GoogleFonts.poppins(color: Colors.white),
                       ),
                       subtitle: Text(

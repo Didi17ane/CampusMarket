@@ -38,7 +38,6 @@ Future<User?> signUpUser({
         throw Exception("Erreur intervenue lors de l'authentification ");
     }
   } catch (e) {
-    Exception("Database Error: $e");
-    rethrow;
+    throw Exception("Database Error: $e");
   }
 }
