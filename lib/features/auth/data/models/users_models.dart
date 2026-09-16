@@ -4,7 +4,7 @@ class Users {
   String lastname;
   String email;
   String phoneNumber;
-  String photo;
+  String? photo;
 
   Users({
     this.id = '',
@@ -12,7 +12,7 @@ class Users {
     required this.lastname,
     required this.email,
     required this.phoneNumber,
-    required this.photo,
+    this.photo,
   });
 
   Map<String, dynamic> toJson() => {
@@ -24,11 +24,14 @@ class Users {
     'photo': photo,
   };
 
-  Users fromJson(Map<String, dynamic> json) => Users(
-    name: json['name'],
-    lastname: json['lastname'],
-    email: json['email'],
-    phoneNumber: json['phoneNumber'],
-    photo: json['photo'],
+  // Factory : permet d'écrire Users.fromJson(json) directement,
+  // sans avoir besoin d'une instance existante au préalable.
+  factory Users.fromJson(Map<String, dynamic> json, {String id = ''}) => Users(
+    id: id.isNotEmpty ? id : (json['id'] ?? ''),
+    name: json['name'] ?? '',
+    lastname: json['lastname'] ?? '',
+    email: json['email'] ?? '',
+    phoneNumber: json['phoneNumber'] ?? '',
+    photo: json['photo'] ?? '',
   );
 }
