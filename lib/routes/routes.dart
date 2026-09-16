@@ -8,6 +8,7 @@ import '../features/auth/presentation/providers/route_auth_provider.dart';
 import '../features/auth/presentation/screens/profil_screen.dart';
 import '../features/mes_annonces/presentation/screens/mes_annonces_screen.dart';
 import '../features/annonces/presentation/screens/publier_annonce_screen.dart';
+import '../features/auth/presentation/screens/user_picture.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authNotifier = ref.watch(routerAuthNotifierProvider);

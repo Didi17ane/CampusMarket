@@ -1,3 +1,4 @@
+import 'package:campusmarket/features/auth/presentation/screens/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import './routes/routes.dart';
 import 'firebase_options.dart';
+import './features/auth/presentation/screens/user_picture.dart';
 import 'core/providers/auth_providers.dart';
 
 // ID UTILISATEUR DE TEST — uniquement pour visualiser Profil/Mes annonces
@@ -20,6 +22,7 @@ void main() async {
   runApp(
     ProviderScope(
       overrides: [currentUserIdProvider.overrideWithValue(kTestUserId)],
+      // child: const CampusMarketApp(),
       child: const CampusMarketApp(),
     ),
   );

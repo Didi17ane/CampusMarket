@@ -45,6 +45,7 @@ dependencies:
   keyboard_safe: ^1.0.0
   snackify: ^1.2.4
   flutter_riverpod: ^3.4.3
+  intl_phone_number_input: ^0.7.5
 
 dev_dependencies:
   flutter_test:
