@@ -115,9 +115,6 @@ lib/
 
 </div>
 
-> Ajoute tes captures dans `docs/screenshots/` et remplace les cellules du tableau ci-dessus par
-> `<img src="docs/screenshots/catalogue.png" width="200"/>` (une ligne par écran).
-
 ## 🚀 Démarrage rapide
 
 ### Prérequis
