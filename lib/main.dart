@@ -1,3 +1,4 @@
+import 'package:campusmarket/features/auth/presentation/screens/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import './core/constants/theme_contants.dart';
 import 'firebase_options.dart';
 import './routes/routes.dart';
+import './features/auth/presentation/screens/user_picture.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
